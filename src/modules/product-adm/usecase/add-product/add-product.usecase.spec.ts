@@ -5,26 +5,35 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
+import AddProductUseCase from "./add-product.usecase";
+
 const MockProductRepository = () => {
   return {
     addProduct: jest.fn(),
-    find: jest.fn(),
+    findProductById: jest.fn(),
   }
 };
 
 describe("Add Product Use Case Unit Tests", () => {
 
-  it("should add a product", () => {
+  it("should add a product", async () => {
     const productRepository = MockProductRepository();
     const useCase = new AddProductUseCase(productRepository);
 
     const input = {
-      name: "Product 1",
-      description: "Description 1",
-      price: 100,
+      name: "Product Test",
+      description: "Product Description",
+      purchasePrice: 10.00,
       stock: 10,
-    }
+    };
 
-    useCase.execute(input);
-  });
+    const result = await useCase.execute(input);
+
+    expect(productRepository.addProduct).toHaveBeenCalled();
+    expect(result.id).toBeDefined();
+    expect(result.name).toBe(input.name);
+    expect(result.description).toBe(input.description);
+    expect(result.purchasePrice).toBe(input.purchasePrice);
+    expect(result.stock).toBe(input.stock);
+  })
 });
