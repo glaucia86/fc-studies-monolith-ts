@@ -1,7 +1,7 @@
 /**
  * file: src/modules/product-adm/repository/product.model.ts
  * description: file responsible for the definition of the product model.
- * data: 08/12/2024
+ * data: 08/13/2024
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
@@ -14,23 +14,23 @@ import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 export class ProductModel extends Model {
   @PrimaryKey
   @Column({ allowNull: false })
-  id: string;
+  declare id: string;
 
   @Column({ allowNull: false })
-  name: string;
+  declare name: string;
 
   @Column({ allowNull: false })
-  description: string;
+  declare description: string;
 
   @Column({ allowNull: false })
-  purchasePrice: number;
+  declare purchasePrice: number;
 
   @Column({ allowNull: false })
-  stock: number;
+  declare stock: number;
 
   @Column({ allowNull: false })
-  createdAt: Date;
+  declare createdAt: Date;
 
   @Column({ allowNull: false })
-  updatedAt: Date;
+  declare updatedAt: Date;
 }
