@@ -18,15 +18,13 @@ export default class AddProductUseCase {
   }
 
   async execute(input: AddProductInputDto): Promise<AddProductOutputDto> {
-
-
     const props = {
       id: new Id(input.id),
       name: input.name,
       description: input.description,
       purchasePrice: input.purchasePrice,
       stock: input.stock,
-    }
+    };
 
     const product = new Product(props);
     this._productRepository.addProduct(product);
@@ -39,6 +37,6 @@ export default class AddProductUseCase {
       stock: product.stock,
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
-    }
+    };
   }
 }

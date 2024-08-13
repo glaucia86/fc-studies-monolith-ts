@@ -29,7 +29,7 @@ export default class ProductRepository implements ProductGateway {
     });
 
     if (!product) {
-      throw new Error(`Product with ${id} not found`);
+      throw new Error(`Product with id ${id} not found`);
     }
 
     return new Product({

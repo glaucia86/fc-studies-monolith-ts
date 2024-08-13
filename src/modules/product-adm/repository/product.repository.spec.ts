@@ -6,18 +6,18 @@
  */
 
 import { Sequelize } from "sequelize-typescript";
-import { ProductModel } from "./product.model";
-import Product from "../domain/product.entity";
 import Id from "../../@shared/domain/value-object/id.value-object";
+import Product from "../domain/product.entity";
+import { ProductModel } from "./product.model";
 import ProductRepository from "./product.repository";
 
-describe('Product Repository', () => {
+describe("ProductRepository test", () => {
   let sequelize: Sequelize;
 
   beforeEach(async () => {
     sequelize = new Sequelize({
-      dialect: 'sqlite',
-      storage: ':memory:',
+      dialect: "sqlite",
+      storage: ":memory:",
       logging: false,
       sync: { force: true },
     });
@@ -46,32 +46,32 @@ describe('Product Repository', () => {
       where: { id: productProps.id.id },
     });
 
-    expect(productProps.id.id).toEqual(productDb.dataValues.id);
-    expect(productProps.name).toEqual(productDb.dataValues.name);
-    expect(productProps.description).toEqual(productDb.dataValues.description);
-    expect(productProps.purchasePrice).toEqual(productDb.dataValues.purchasePrice);
-    expect(productProps.stock).toEqual(productDb.dataValues.stock);
+    expect(productProps.id.id).toEqual(productDb.id);
+    expect(productProps.name).toEqual(productDb.name);
+    expect(productProps.description).toEqual(productDb.description);
+    expect(productProps.purchasePrice).toEqual(productDb.purchasePrice);
+    expect(productProps.stock).toEqual(productDb.stock);
   });
 
   it("should find a product", async () => {
     const productRepository = new ProductRepository();
 
     ProductModel.create({
-      id: '1',
-      name: 'Product 1',
-      description: 'Product 1 description',
+      id: "1",
+      name: "Product 1",
+      description: "Product 1 description",
       purchasePrice: 100,
       stock: 10,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
 
-    const product = await productRepository.findProductById('1');
+    const product = await productRepository.findProductById("1");
 
-    expect(product.id.id).toEqual('1');
-    expect(product.name).toEqual('Product 1');
-    expect(product.description).toEqual('Product 1 description');
-    expect(product.purchasePrice).toEqual(10);
-    expect(product.stock).toEqual(100);
+    expect(product.id.id).toEqual("1");
+    expect(product.name).toEqual("Product 1");
+    expect(product.description).toEqual("Product 1 description");
+    expect(product.purchasePrice).toEqual(100);
+    expect(product.stock).toEqual(10);
   });
 });

@@ -5,8 +5,8 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
-import { v4 as uuidv4 } from 'uuid';
-import ValueObject from './value-object.interface';
+import ValueObject from "./value-object.interface";
+import { v4 as uuidv4 } from "uuid";
 
 export default class Id implements ValueObject {
   private _id: string;
