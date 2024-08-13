@@ -9,8 +9,8 @@ import AddProductUseCase from "./add-product.usecase";
 
 const MockProductRepository = () => {
   return {
-    addProduct: jest.fn(),
-    findProductById: jest.fn(),
+    add: jest.fn(),
+    findById: jest.fn(),
   };
 };
 
@@ -28,7 +28,7 @@ describe("Add Product usecase unit test", () => {
 
     const result = await usecase.execute(input);
 
-    expect(productRepository.addProduct).toHaveBeenCalled();
+    expect(productRepository.add).toHaveBeenCalled();
     expect(result.id).toBeDefined;
     expect(result.name).toBe(input.name);
     expect(result.description).toBe(input.description);

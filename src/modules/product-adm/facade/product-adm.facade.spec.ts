@@ -11,7 +11,7 @@ import ProductRepository from "../repository/product.repository";
 import AddProductUseCase from "../usecase/add-product/add-product.usecase";
 import ProductAdminFacade from "./product-adm.facade";
 
-describe('Product Adm Facade Test', async () => {
+describe('Product Adm Facade Test', () => {
   let sequelize: Sequelize;
 
   beforeEach(async () => {
@@ -56,9 +56,9 @@ describe('Product Adm Facade Test', async () => {
 
     expect(product).toBeDefined();
     expect(product.id).toBe(input.id);
-    expect(product.id).toBe(input.name);
-    expect(product.id).toBe(input.description);
-    expect(product.id).toBe(input.purchasePrice);
-    expect(product.id).toBe(input.stock);
+    expect(product.name).toBe(input.name);
+    expect(product.description).toBe(input.description);
+    expect(product.purchasePrice).toBe(input.purchasePrice);
+    expect(product.stock).toBe(input.stock);
   });
 });
