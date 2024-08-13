@@ -11,7 +11,7 @@ import ProductGateway from "../gateway/product.gateway";
 import { ProductModel } from "./product.model";
 
 export default class ProductRepository implements ProductGateway {
-  async addProduct(product: Product): Promise<void> { // Adicione o tipo de retorno
+  async add(product: Product): Promise<void> { // Adicione o tipo de retorno
     await ProductModel.create({
       id: product.id.id,
       name: product.name,
@@ -23,7 +23,7 @@ export default class ProductRepository implements ProductGateway {
     });
   }
 
-  async findProductById(id: string): Promise<Product> { // Adicione o tipo de retorno
+  async findById(id: string): Promise<Product> { // Adicione o tipo de retorno
     const product = await ProductModel.findOne({
       where: { id },
     });

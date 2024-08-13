@@ -41,7 +41,7 @@ describe("ProductRepository test", () => {
     };
     const product = new Product(productProps);
     const productRepository = new ProductRepository();
-    await productRepository.addProduct(product);
+    await productRepository.add(product);
 
     const productDb = await ProductModel.findOne({
       where: { id: productProps.id.id },
@@ -67,7 +67,7 @@ describe("ProductRepository test", () => {
       updatedAt: new Date(),
     });
 
-    const product = await productRepository.findProductById("1");
+    const product = await productRepository.findById("1");
 
     expect(product.id.id).toEqual("1");
     expect(product.name).toEqual("Product 1");
