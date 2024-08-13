@@ -27,9 +27,9 @@ describe("ProductRepository test", () => {
     await sequelize.sync();
   });
 
-  afterEach(async () => {
-    await sequelize.close();
-  });
+  //afterEach(async () => {
+  //  await sequelize.close();
+  //});
 
   it("should create a product", async () => {
     const productProps = {
