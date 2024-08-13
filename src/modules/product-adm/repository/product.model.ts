@@ -5,14 +5,13 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
-import { Column, PrimaryKey, Table, Model } from "sequelize-typescript";
+import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 @Table({
-  tableName: 'products',
-  timestamps: false
+  tableName: "products",
+  timestamps: false,
 })
 export class ProductModel extends Model {
-
   @PrimaryKey
   @Column({ allowNull: false })
   id: string;
