@@ -10,7 +10,6 @@ import Product from "../domain/product.entity";
 import ProductGateway from "../gateway/product.gateway";
 import ProductModel from "./product.model";
 
-
 export default class ProductRepository implements ProductGateway {
   async findById(id: string): Promise<Product> {
     const product = await ProductModel.findOne({
@@ -41,6 +40,4 @@ export default class ProductRepository implements ProductGateway {
       });
     });
   }
-
-
 }
