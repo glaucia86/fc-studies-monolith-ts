@@ -29,8 +29,17 @@ export default class ProductRepository implements ProductGateway {
     });
   }
 
-  findAll(): Promise<Product[]> {
-    throw new Error("Method not implemented.");
+  async findAll(): Promise<Product[]> {
+    const products = await ProductModel.findAll();
+
+    return products.map((product) => {
+      return new Product({
+        id: new Id(product.id),
+        name: product.name,
+        description: product.description,
+        salesPrice: product.salesPrice,
+      });
+    });
   }
 
 
