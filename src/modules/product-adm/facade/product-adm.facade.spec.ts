@@ -47,10 +47,10 @@ describe("Product Adm Facade test", () => {
 
     const input = {
       id: "1",
-      name: "DDD",
-      description: "Domain driven design",
-      purchasePrice: 25.90,
-      stock: 150
+      name: "Product 1",
+      description: "Product 1 description",
+      purchasePrice: 10.90,
+      stock: 200
     }
 
     await productFacade.addProduct(input)
@@ -70,10 +70,10 @@ describe("Product Adm Facade test", () => {
 
     const input = {
       id: "1",
-      name: "DDD",
-      description: "Domain driven design",
-      purchasePrice: 25.90,
-      stock: 150
+      name: "Product 1",
+      description: "Product 1 description",
+      purchasePrice: 10.90,
+      stock: 200
     }
 
     await productFacade.addProduct(input)
