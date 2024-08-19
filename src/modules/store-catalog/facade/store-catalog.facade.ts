@@ -30,8 +30,8 @@ export default class StoreCatalogFacade implements StoreCatalogFacadeInterface {
   findById(id: FindStoreCatalogFacadeInputDto): Promise<FindStoreCatalogFacadeOutputDto> {
     return this._findUseCase.execute(id);
   }
+
   findAll(): Promise<FindAllStoreCatalogFacadeOutputDto> {
     return this._findAllUseCase.execute();
   }
-
 }
