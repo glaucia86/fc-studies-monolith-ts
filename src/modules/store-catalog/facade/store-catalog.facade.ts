@@ -27,7 +27,6 @@ export default class StoreCatalogFacade implements StoreCatalogFacadeInterface {
     this._findUseCase = useCaseProps.findUseCase;
   }
 
-
   findById(id: FindStoreCatalogFacadeInputDto): Promise<FindStoreCatalogFacadeOutputDto> {
     return this._findUseCase.execute(id);
   }
