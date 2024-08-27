@@ -1,6 +1,6 @@
 /**
  * file: src/modules/client-adm/usecase/add-client/add-client.usecase.spec.ts
- * description: file responsible for the implementation of the add client use case test.
+ * description: file responsible for the implementation of the add client use case test file.
  * data: 08/27/2024
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */

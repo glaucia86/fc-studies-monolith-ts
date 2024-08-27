@@ -1,6 +1,6 @@
 /**
  * file: src/modules/client-adm/usecase/add-client/add-client.usecase.ts
- * description: file responsible for the definition of the add client use case dto.
+ * description: file responsible for the definition of the add client use case dto file.
  * data: 08/27/2024
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
@@ -19,7 +19,6 @@ export default class AddClientUseCase {
 
   async execute(input: AddClientInputDto): Promise<AddClientOutputDto> {
     const props = {
-      id: new Id(input.id),
       name: input.name,
       email: input.email,
       address: input.address
