@@ -27,26 +27,26 @@ describe('ClientRepository test', () => {
   });
 
   it('should create a client', async () => {
-    const clientProps = {
+    const clientProps = new Client({
       id: new Id("1"),
       name: "Client 1",
       email: "client@email.com",
       address: "Client 1 address",
-    };
+    });
 
-    const client = new Client(clientProps);
     const clientRepository = new ClientRepository();
-    await clientRepository.add(client);
+    await clientRepository.add(clientProps);
 
     const clientDb = await ClientModel.findOne({
       where: { id: clientProps.id.id },
     });
 
-
-    expect(clientProps.id.id).toEqual(clientDb.id);
-    expect(clientProps.name).toEqual(clientDb.name);
-    expect(clientProps.email).toEqual(clientDb.email);
-    expect(clientProps.address).toEqual(clientDb.address);
+    expect(clientDb).toBeDefined();
+    expect(clientDb.name).toEqual(clientProps.name);
+    expect(clientDb.email).toEqual(clientProps.email);
+    expect(clientDb.address).toEqual(clientProps.address);
+    expect(clientDb.createdAt).toEqual(clientProps.createdAt);
+    expect(clientDb.updatedAt).toEqual(clientProps.updatedAt);
   });
 
   it('should find a client', async () => {
