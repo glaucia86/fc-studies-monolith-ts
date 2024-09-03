@@ -50,9 +50,7 @@ describe('ClientRepository test', () => {
   });
 
   it('should find a client', async () => {
-    const clientRepository = new ClientRepository();
-
-    ClientModel.create({
+    const client = await ClientModel.create({
       id: "1",
       name: "Client 1",
       email: "client@email.com",
@@ -61,11 +59,14 @@ describe('ClientRepository test', () => {
       updatedAt: new Date(),
     });
 
-    const client = await clientRepository.findById("1");
+    const clientRepository = new ClientRepository();
+    const clientResult = await clientRepository.findById(client.id);
 
-    expect(client.id.id).toEqual("1");
-    expect(client.name).toEqual("Client 1");
-    expect(client.email).toEqual("client@email.com");
-    expect(client.address).toEqual("Client 1 address");
+    expect(clientResult.id.id).toEqual(client.id);
+    expect(clientResult.name).toEqual(client.name);
+    expect(clientResult.email).toEqual(client.email);
+    expect(clientResult.address).toEqual(client.address);
+    expect(clientResult.createdAt).toEqual(client.createdAt);
+    expect(clientResult.updatedAt).toEqual(client.updatedAt);
   });
 });
