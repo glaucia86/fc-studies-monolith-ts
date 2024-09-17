@@ -26,8 +26,7 @@ export default class ClientAdmFacade implements ClientAdmFacadeInterface {
     await this._addClientUseCase.execute(input);
   }
 
-  find(input: FindClientFacadeInputDto): Promise<FindClientFacadeOutPutDto> {
-    return this._findClientUseCase.execute(input);
+  async find(input: FindClientFacadeInputDto): Promise<FindClientFacadeOutPutDto> {
+    return await this._findClientUseCase.execute(input);
   }
-
 }
