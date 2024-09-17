@@ -45,8 +45,8 @@ describe('ClientRepository test', () => {
     expect(clientDb.name).toEqual(clientProps.name);
     expect(clientDb.email).toEqual(clientProps.email);
     expect(clientDb.address).toEqual(clientProps.address);
-    expect(clientDb.createdAt).toEqual(clientProps.createdAt);
-    expect(clientDb.updatedAt).toEqual(clientProps.updatedAt);
+    expect(clientDb.createdAt).toStrictEqual(clientProps.createdAt);
+    expect(clientDb.updatedAt).toStrictEqual(clientProps.updatedAt);
   });
 
   it('should find a client', async () => {
