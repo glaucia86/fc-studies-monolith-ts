@@ -15,7 +15,7 @@ type TransactionProps = {
   orderId: string;
   status?: string;
   createdAt?: Date;
-  updateAt?: Date;
+  updatedAt?: Date;
 }
 
 export default class Transaction extends BaseEntity implements AggregateRoot {
@@ -24,7 +24,7 @@ export default class Transaction extends BaseEntity implements AggregateRoot {
   private _status: string;
 
   constructor(props: TransactionProps) {
-    super(props.id, props.createdAt, props.updateAt);
+    super(props.id, props.createdAt, props.updatedAt);
     this._amount = props.amount;
     this._orderId = props.orderId;
     this._status = props.status || 'pending';
