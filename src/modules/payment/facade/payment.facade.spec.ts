@@ -10,6 +10,7 @@ import TransactionModel from "../repository/transaction.model"
 import TransactionRepository from "../repository/transaction.repository"
 import ProcessPaymentUseCase from "../usecase/process-payment/process-payment.usecase"
 import PaymentFacade from "./payment.facade"
+import PaymentFacadeFactory from "../factory/payment.facade.factory"
 
 describe("Payment Facade test", () => {
 
@@ -33,16 +34,18 @@ describe("Payment Facade test", () => {
   })
 
   it("should create a transaction", async () => {
-    const repository = new TransactionRepository();
-    const useCase = new ProcessPaymentUseCase(repository);
-    const facade = new PaymentFacade(useCase);
+    // const repository = new TransactionRepository();
+    // const useCase = new ProcessPaymentUseCase(repository);
+    // const facade = new PaymentFacade(useCase);
+
+    const facadePayment = PaymentFacadeFactory.create();
 
     const input = {
       orderId: "order-1",
       amount: 100.00,
     }
 
-    const output = await facade.process(input);
+    const output = await facadePayment.process(input);
 
     expect(output.transactionId).toBeDefined();
     expect(output.orderId).toBe(input.orderId);
