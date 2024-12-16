@@ -31,7 +31,7 @@ describe('PlaceOrder UseCase unit Test', () => {
 
     it('should throw an error when product are not valid', async () => {
       const mockClientFacade = {
-        find: jest.fn().mockResolvedValue(null),
+        find: jest.fn().mockResolvedValue(true),
       };
 
       //@ts-expect-error - no params in constructor

@@ -21,7 +21,7 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
       throw new Error('Client not found');
     }
 
-
+    await this.validateProducts(input);
     // buscar os produtos. Caso não encontre -> product not found
     // calcular o total
     // recuperar os produtos
@@ -41,6 +41,12 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
       status: '',
       total: 0,
       products: [],
+    }
+  }
+
+  private async validateProducts(input: PlaceOrderInputDto): Promise<void> {
+    if (input.products.length === 0) {
+      throw new Error('No products selected');
     }
   }
 }
