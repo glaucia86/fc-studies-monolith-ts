@@ -35,35 +35,35 @@ describe('PlaceOrder UseCase unit Test', () => {
       placeOrderUseCase['_productFacade'] = mockProductFacade;
 
       let input: PlaceOrderInputDto = {
-        clientId: '0',
+        clientId: '1',
         products: [{ productId: '1' }],
       };
 
       await expect(placeOrderUseCase['validateProducts'](input)).rejects.toThrow(new Error('Product 1 is not available in stock'));
 
       input = {
-        clientId: '0',
-        products: [{ productId: '0' }, { productId: '1' }],
+        clientId: '2',
+        products: [{ productId: '2' }, { productId: '1' }],
       };
 
       await expect(placeOrderUseCase['validateProducts'](input)).rejects.toThrow(new Error('Product 1 is not available in stock'));
       expect(mockProductFacade.checkStock).toHaveBeenCalledTimes(3);
 
       input = {
-        clientId: '0',
-        products: [{ productId: '1' }, { productId: '1' }],
-      };
-
-      await expect(placeOrderUseCase['validateProducts'](input)).rejects.toThrow(new Error('Product 1 is not available in stock'));
-      expect(mockProductFacade.checkStock).toHaveBeenCalledTimes(3);
-
-      input = {
-        clientId: '0',
-        products: [{ productId: '1' }, { productId: '2' }],
+        clientId: '2',
+        products: [{ productId: '2' }, { productId: '3' }],
       };
 
       await expect(placeOrderUseCase['validateProducts'](input)).rejects.toThrow(new Error('Product 1 is not available in stock'));
       expect(mockProductFacade.checkStock).toHaveBeenCalledTimes(5);
+
+      input = {
+        clientId: '2',
+        products: [{ productId: "2" }, { productId: "3" }, { productId: "1" }],
+      };
+
+      await expect(placeOrderUseCase['validateProducts'](input)).rejects.toThrow(new Error('Product 1 is not available in stock'));
+      expect(mockProductFacade.checkStock).toHaveBeenCalledTimes(6);
     });
   });
 
