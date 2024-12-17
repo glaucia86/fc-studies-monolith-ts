@@ -67,6 +67,31 @@ describe('PlaceOrder UseCase unit Test', () => {
     });
   });
 
+  describe('getProducts method', () => {
+    beforeAll(() => {
+      jest.useFakeTimers("modern");
+      jest.setSystemTime(new Date("2023-01-01"));
+    });
+
+    afterAll(() => {
+      jest.useRealTimers();
+    });
+
+    //@ts-expect-error - no params in constructor
+    const placeOrderUseCase = new PlaceOrderUseCase();
+
+    it('should throw an error when product not found', async () => {
+      const mockCatalogFacade = {
+        find: jest.fn().mockResolvedValue(null),
+      };
+
+      //@ts-expect-error - force set catalogFacade
+      placeOrderUseCase['_catalogFacade'] = mockCatalogFacade;
+
+      await expect(placeOrderUseCase['getProduct']('0')).rejects.toThrow(new Error('Product not found'));
+    })
+  });
+
   describe('execute method', () => {
     // buscar o cliente. Caso não encontre -> client not found
     it('should throw an error when client not found', async () => {
