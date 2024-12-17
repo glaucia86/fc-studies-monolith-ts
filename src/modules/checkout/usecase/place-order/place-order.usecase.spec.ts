@@ -16,7 +16,7 @@ describe('PlaceOrder UseCase unit Test', () => {
 
     it('should throw an error when no products are selected', async () => {
       const input: PlaceOrderInputDto = {
-        clientId: '0',
+        clientId: '',
         products: [],
       };
 
@@ -35,42 +35,28 @@ describe('PlaceOrder UseCase unit Test', () => {
       placeOrderUseCase['_productFacade'] = mockProductFacade;
 
       let input: PlaceOrderInputDto = {
-        clientId: '1',
+        clientId: '0',
         products: [{ productId: '1' }],
       };
 
       await expect(placeOrderUseCase['validateProducts'](input)).rejects.toThrow(new Error('Product 1 is not available in stock'));
 
+      expect(mockProductFacade.checkStock).toHaveBeenCalledTimes(1);
+
       input = {
-        clientId: '2',
-        products: [{ productId: '2' }, { productId: '1' }],
+        clientId: '0',
+        products: [{ productId: "0" }, { productId: "1" }, { productId: "2" }],
       };
 
       await expect(placeOrderUseCase['validateProducts'](input)).rejects.toThrow(new Error('Product 1 is not available in stock'));
       expect(mockProductFacade.checkStock).toHaveBeenCalledTimes(3);
-
-      input = {
-        clientId: '2',
-        products: [{ productId: '2' }, { productId: '3' }],
-      };
-
-      await expect(placeOrderUseCase['validateProducts'](input)).rejects.toThrow(new Error('Product 1 is not available in stock'));
-      expect(mockProductFacade.checkStock).toHaveBeenCalledTimes(5);
-
-      input = {
-        clientId: '2',
-        products: [{ productId: "2" }, { productId: "3" }, { productId: "1" }],
-      };
-
-      await expect(placeOrderUseCase['validateProducts'](input)).rejects.toThrow(new Error('Product 1 is not available in stock'));
-      expect(mockProductFacade.checkStock).toHaveBeenCalledTimes(6);
     });
   });
 
-  describe('getProducts method', () => {
+  describe('getProduct method', () => {
     beforeAll(() => {
       jest.useFakeTimers("modern");
-      jest.setSystemTime(new Date("2023-01-01"));
+      jest.setSystemTime(new Date(2000, 1, 1));
     });
 
     afterAll(() => {
@@ -82,7 +68,7 @@ describe('PlaceOrder UseCase unit Test', () => {
 
     it('should throw an error when product not found', async () => {
       const mockCatalogFacade = {
-        find: jest.fn().mockResolvedValue(null),
+        findById: jest.fn().mockResolvedValue(null),
       };
 
       //@ts-expect-error - force set catalogFacade

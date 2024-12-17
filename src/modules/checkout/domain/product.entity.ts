@@ -14,7 +14,6 @@ type ProductProps = {
   name: string;
   description: string;
   salesPrice: number;
-  stock: number;
 }
 
 export default class Product extends BaseEntity implements AggregateRoot {
