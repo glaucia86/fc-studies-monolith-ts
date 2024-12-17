@@ -89,7 +89,7 @@ describe('PlaceOrder UseCase unit Test', () => {
         }),
       };
 
-      //@ts-expect-error - no params in constructor
+      //@ts-expect-error - force set catalogFacade
       placeOrderUseCase['_catalogFacade'] = mockCatalogFacade;
 
       await expect(placeOrderUseCase['getProduct']('0')).resolves.toEqual(
@@ -101,7 +101,7 @@ describe('PlaceOrder UseCase unit Test', () => {
         })
       );
 
-      expect(mockCatalogFacade.find).toHaveBeenCalledTimes(1);
+      expect(mockCatalogFacade.findById).toHaveBeenCalledTimes(1);
     });
   });
 
