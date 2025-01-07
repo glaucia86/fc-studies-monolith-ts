@@ -12,6 +12,7 @@ import ProductAdmFacadeInterface from "../../../product-adm/facade/product-adm.f
 import StoreCatalogFacadeInterface from "../../../store-catalog/facade/store-catalog.facade.interface.dto";
 import Client from "../../domain/client.entity";
 import Product from "../../domain/product.entity";
+import Order from "../../domain/order.entity";
 import { PlaceOrderInputDto, PlaceOrderOutputDto } from "./place-order.dto";
 
 export default class PlaceOrderUseCase implements UseCaseInterface {
@@ -52,6 +53,8 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
       client: myClient,
       products,
     });
+
+    
 
     // processpayment -> paymentfacade.process (orderid, amount)
     // caso pagamento seja aprovado -> gerar invoice

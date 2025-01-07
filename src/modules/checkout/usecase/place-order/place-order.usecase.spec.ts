@@ -151,5 +151,74 @@ describe('PlaceOrder UseCase unit Test', () => {
 
       expect(mockValidateProducts).toHaveBeenCalledTimes(1);
     });
+
+    describe("place an order", () => {
+      const clientProps = {
+        id: '1',
+        name: 'Client 1',
+        document: '000.000.000-00',
+        email: 'gluacia@gmail.com',
+        street: 'Street 1',
+        number: '1',
+        complement: 'Complement 1',
+        city: 'City 1',
+        state: 'State 1',
+        zipCode: '00000-000',
+      };
+
+      const mockClientFacade = {
+        find: jest.fn().mockResolvedValue(clientProps),
+      };
+
+      const mockPaymentFacade = {
+        process: jest.fn(),
+      };
+
+      const mockCheckoutRepository = {
+        addOrder: jest.fn(),
+      };
+
+      const mockInvoiceFacade = {
+        create: jest.fn().mockResolvedValue({ id: "1i" })
+      };
+
+      const placeOrderUseCase = new PlaceOrderUseCase(
+        mockClientFacade,
+        null,
+        null,
+        mockCheckoutRepository,
+        mockInvoiceFacade,
+        mockPaymentFacade
+      );
+
+      const products = {
+        '1': new Product({
+          id: new Id('1'),
+          name: 'Product 1',
+          description: 'Product 1 description',
+          salesPrice: 10,
+        }),
+        '2': new Product({
+          id: new Id('2'),
+          name: 'Product 2',
+          description: 'Product 2 description',
+          salesPrice: 20,
+        }),
+      };
+
+      const mockValidateProducts = jest
+        //@ts-expect-error - spy on private method
+        .spyOn(placeOrderUseCase, 'validateProducts')
+        //@ts-expect-error - spy on private method
+        .mockResolvedValue(null);
+
+      const mockGetProduct = jest
+        //@ts-expect-error - spy on private method
+        .spyOn(placeOrderUseCase, 'getProduct')
+        //@ts-expect-error - spy on private method
+        .mockImplementation((productId: keyof typeof products) => {
+          return products[productId];
+        });
+    });
   });
 });
