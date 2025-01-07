@@ -179,7 +179,7 @@ describe('PlaceOrder UseCase unit Test', () => {
       };
 
       const mockInvoiceFacade = {
-        create: jest.fn().mockResolvedValue({ id: "1i" })
+        create: jest.fn().mockResolvedValue({ id: "1t" })
       };
 
       const placeOrderUseCase = new PlaceOrderUseCase(
@@ -219,6 +219,44 @@ describe('PlaceOrder UseCase unit Test', () => {
         .mockImplementation((productId: keyof typeof products) => {
           return products[productId];
         });
+
+      it('should not to be approved when payment is not approved', async () => {
+        mockPaymentFacade.process = mockPaymentFacade.process.mockReturnValue({
+          transactionId: '1t',
+          orderId: '1o',
+          amount: 100,
+          status: 'error',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+
+        const input: PlaceOrderInputDto = {
+          clientId: '1c',
+          products: [{ productId: '1' }, { productId: '2' }],
+        };
+
+        let output = await placeOrderUseCase.execute(input);
+
+        expect(output.invoiceId).toBeNull();
+        expect(output.total).toBe(30);
+        expect(output.products).toStrictEqual([
+          { productId: '1' },
+          { productId: '2' },
+        ]);
+        expect(mockClientFacade.find).toHaveBeenCalledTimes(1);
+        expect(mockClientFacade.find).toHaveBeenCalledWith({ id: '1c' });
+        expect(mockValidateProducts).toHaveBeenCalledTimes(1);
+        expect(mockValidateProducts).toHaveBeenCalledWith(input);
+        expect(mockGetProduct).toHaveBeenCalledTimes(2);
+        expect(mockCheckoutRepository.addOrder).toHaveBeenCalledTimes(1);
+        expect(mockPaymentFacade.process).toHaveBeenCalledTimes(1);
+        expect(mockPaymentFacade.process).toHaveBeenCalledWith({
+          orderId: output.id,
+          amount: output.total,
+        });
+
+        expect(mockInvoiceFacade.create).toHaveBeenCalledTimes(0);
+      });
     });
   });
 });
