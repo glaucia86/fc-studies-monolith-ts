@@ -10,12 +10,12 @@ import BaseEntity from "../../@shared/domain/entity/base.entity";
 import Id from "../../@shared/domain/value-object/id.value-object";
 
 type InvoiceItemProps = {
-  id?: Id;
+  id: Id;
   name: string;
   price: number;
 }
 
-export default class InvoiceItem extends BaseEntity implements AggregateRoot {
+export class InvoiceItem extends BaseEntity implements AggregateRoot {
 
   private _name: string;
   private _price: number;
@@ -32,13 +32,5 @@ export default class InvoiceItem extends BaseEntity implements AggregateRoot {
 
   get price(): number {
     return this._price;
-  }
-
-  set name(name: string) {
-    this._name = name;
-  }
-
-  set price(price: number) {
-    this._price = price;
   }
 }

@@ -23,6 +23,7 @@ describe('Add Client Adm UseCase unit Test', () => {
       name: 'Glaucia Lemos',
       email: 'glaucia@email.com',
       address: '123 Main St',
+      document: '0000'
     };
 
     const result = await useCase.execute(input);
@@ -32,5 +33,6 @@ describe('Add Client Adm UseCase unit Test', () => {
     expect(result.name).toBe(input.name)
     expect(result.email).toBe(input.email)
     expect(result.address).toBe(input.address)
+    expect(result.document).toBe(input.document)
   });
 });

@@ -45,7 +45,8 @@ describe('Client Adm Facade test', () => {
       id: "1",
       name: "Client 1",
       email: "email@email.com",
-      address: "Client 1 address"
+      address: "Client 1 address",
+      document: '0000'
     }
 
     await clientFacade.add(input);
@@ -53,28 +54,22 @@ describe('Client Adm Facade test', () => {
     const client = await ClientModel.findOne({ where: { id: "1" } });
 
     expect(client).toBeDefined();
+    expect(client.id).toBe(input.id);
     expect(client.name).toBe(input.name);
     expect(client.email).toBe(input.email);
     expect(client.address).toBe(input.address);
+    expect(client.document).toBe(input.document);
   });
 
   it("should find a client", async () => {
-    // const clientRepository = new ClientRepository();
-    // const addClientUseCase = new AddClientUseCase(clientRepository);
-    // const findClientUseCase = new FindClientUseCase(clientRepository);
-
-    // const clientFacade = new ClientAdmFacade({
-    //   addClientUseCase: addClientUseCase,
-    //   findClientUseCase: findClientUseCase
-    // });
-
     const clientFacade = ClientAdmFacadeFactory.create();
 
     const input = {
       id: "1",
       name: "Client 1",
       email: "email@email.com",
-      address: "Client 1 address"
+      address: "Client 1 address",
+      document: '0000'
     }
 
     await clientFacade.add(input);
@@ -86,5 +81,6 @@ describe('Client Adm Facade test', () => {
     expect(client.name).toBe(input.name);
     expect(client.email).toBe(input.email);
     expect(client.address).toBe(input.address);
+    expect(client.document).toBe(input.document);
   });
 });

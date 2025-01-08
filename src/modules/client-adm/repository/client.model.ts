@@ -6,6 +6,7 @@
  */
 
 import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { Col } from "sequelize/types/utils";
 
 @Table({
   tableName: "clients",
@@ -25,6 +26,9 @@ export class ClientModel extends Model {
 
   @Column({ allowNull: false })
   declare address: string;
+
+  @Column({ allowNull: false })
+  declare document: string;
 
   @Column({ allowNull: false })
   declare createdAt: Date;

@@ -8,7 +8,7 @@
 import Id from "../../../@shared/domain/value-object/id.value-object";
 import InvoiceItem from "../../domain/invoice-item.entity";
 import Invoice from "../../domain/invoice.entity";
-import Address from "../../domain/value-object/address";
+import Address from "../../domain/value-object/address.value-object";
 import InvoiceGateway from "../../gateway/invoice.gateway";
 import { GenerateInvoiceUseCaseInputDto, GenerateInvoiceUseCaseOutputDto } from "./generate-invoice.dto";
 

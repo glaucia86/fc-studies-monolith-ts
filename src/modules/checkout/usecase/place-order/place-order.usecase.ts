@@ -8,27 +8,39 @@
 import Id from "../../../@shared/domain/value-object/id.value-object";
 import UseCaseInterface from "../../../@shared/usecase/use-case.interface";
 import ClientAdmFacadeInterface from "../../../client-adm/facade/client-adm.facade.interface";
+import { InvoiceFacadeInterface } from "../../../invoice/facade/invoice.facade.interface";
+import PaymentFacadeInterface from "../../../payment/facade/payment.facade.interface";
 import ProductAdmFacadeInterface from "../../../product-adm/facade/product-adm.facade.interface";
 import StoreCatalogFacadeInterface from "../../../store-catalog/facade/store-catalog.facade.interface.dto";
 import Client from "../../domain/client.entity";
-import Product from "../../domain/product.entity";
 import Order from "../../domain/order.entity";
+import Product from "../../domain/product.entity";
+import { CheckoutGateway } from "../../gateway/checkout.gateway";
 import { PlaceOrderInputDto, PlaceOrderOutputDto } from "./place-order.dto";
 
 export default class PlaceOrderUseCase implements UseCaseInterface {
   private _clientFacade: ClientAdmFacadeInterface;
   private _productFacade: ProductAdmFacadeInterface;
   private _catalogFacade: StoreCatalogFacadeInterface;
+  private _invoiceFacade: InvoiceFacadeInterface;
+  private _paymentFacade: PaymentFacadeInterface;
+  private _orderRepository: CheckoutGateway;
 
   constructor(
     clientFacade: ClientAdmFacadeInterface,
     productFacade: ProductAdmFacadeInterface,
     catalogFacade: StoreCatalogFacadeInterface,
+    invoiceFacade: InvoiceFacadeInterface,
+    paymentFacade: PaymentFacadeInterface,
+    orderRepository: CheckoutGateway,
 
   ) {
     this._clientFacade = clientFacade;
     this._productFacade = productFacade;
     this._catalogFacade = catalogFacade;
+    this._invoiceFacade = invoiceFacade;
+    this._paymentFacade = paymentFacade;
+    this._orderRepository = orderRepository;
   }
 
   async execute(input: PlaceOrderInputDto): Promise<PlaceOrderOutputDto> {
@@ -41,34 +53,56 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
 
     const products = await Promise.all(input.products.map(p => this.getProduct(p.productId)));
 
-    const myClient = new Client({
+    const orderClient = new Client({
       id: new Id(client.id),
       name: client.name,
       email: client.email,
       address: client.address,
     });
 
-    //criar o objeto do client
     const order = new Order({
-      client: myClient,
-      products,
+      client: orderClient,
+      products: products,
     });
 
-    
+    const payment = await this._paymentFacade.process({
+      orderId: order.id.id,
+      amount: order.total,
+    })
 
-    // processpayment -> paymentfacade.process (orderid, amount)
-    // caso pagamento seja aprovado -> gerar invoice
-    // caso pagamento seja aprovado -> atualizar o status do pedido para approved
-    // retornar dto com id, invoiceId, status, total, products
+    const invoice =
+      payment.status === "approved"
+        ? await this._invoiceFacade.generateInvoice({
+          city: client.address,
+          zipCode: client.address,
+          street: client.address,
+          state: client.address,
+          complement: client.address,
+          number: client.address,
+          name: client.name,
+          document: client.document,
+          items: products.map((p) => ({
+            id: p.id.id,
+            name: p.name,
+            price: p.salesPrice,
+          })),
+        })
+        : null;
 
+    payment.status === 'approved' && order.approved();
+
+    const invoiceId = payment.status === 'approved' ? invoice.id : null;
+
+    order.setInvoiceId(invoiceId);
+    this._orderRepository.addOrder(order);
 
     return {
-      id: '1',
-      invoiceId: '',
-      status: '',
-      total: 0,
-      products: [],
-    }
+      id: order.id.id,
+      invoiceId,
+      status: order.status,
+      total: order.total,
+      products: products.map((p) => ({ productId: p.id.id })),
+    };
   }
 
   private async validateProducts(input: PlaceOrderInputDto): Promise<void> {

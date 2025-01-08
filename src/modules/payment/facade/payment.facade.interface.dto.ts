@@ -6,14 +6,14 @@
  */
 
 export interface PaymentoFacadeInterfaceInputDto {
-  id?: string;
+  orderId?: string;
   amount: number;
 }
 
 export interface PaymentFacadeInterfaceOutputDto {
   transactionId: string;
-  amount: number;
   orderId: string;
+  amount: number;
   status: string;
   createdAt: Date;
   updatedAt: Date;

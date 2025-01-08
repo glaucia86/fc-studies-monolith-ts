@@ -10,12 +10,14 @@ export interface AddClientInputDto {
   name: string;
   email: string;
   address: string;
+  document: string;
 }
 
 export interface AddClientOutputDto {
   id: string
   name: string;
   email: string;
+  document: string;
   address: string;
   createdAt: Date;
   updatedAt: Date;

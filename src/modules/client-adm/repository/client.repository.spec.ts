@@ -32,6 +32,7 @@ describe('ClientRepository test', () => {
       name: "Client 1",
       email: "client@email.com",
       address: "Client 1 address",
+      document: '0000',
     });
 
     const clientRepository = new ClientRepository();
@@ -45,6 +46,7 @@ describe('ClientRepository test', () => {
     expect(clientDb.name).toEqual(clientProps.name);
     expect(clientDb.email).toEqual(clientProps.email);
     expect(clientDb.address).toEqual(clientProps.address);
+    expect(clientDb.document).toEqual(clientProps.document);
     expect(clientDb.createdAt).toStrictEqual(clientProps.createdAt);
     expect(clientDb.updatedAt).toStrictEqual(clientProps.updatedAt);
   });
@@ -55,6 +57,7 @@ describe('ClientRepository test', () => {
       name: "Client 1",
       email: "client@email.com",
       address: "Client 1 address",
+      document: '0000',
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -66,6 +69,7 @@ describe('ClientRepository test', () => {
     expect(clientResult.name).toEqual(client.name);
     expect(clientResult.email).toEqual(client.email);
     expect(clientResult.address).toEqual(client.address);
+    expect(clientResult.document).toEqual(client.document);
     expect(clientResult.createdAt).toEqual(client.createdAt);
     expect(clientResult.updatedAt).toEqual(client.updatedAt);
   });

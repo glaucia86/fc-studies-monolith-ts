@@ -11,7 +11,7 @@ import { InvoiceItemModel } from "./invoice-item.model";
 import Id from "../../@shared/domain/value-object/id.value-object";
 import Invoice from "../domain/invoice.entity";
 import InvoiceItem from "../domain/invoice-item.entity";
-import Address from "../domain/value-object/address";
+import Address from "../domain/value-object/address.value-object";
 import InvoiceRepository from "./invoice.repository";
 
 describe('Invoice Repository test', () => {

@@ -13,6 +13,7 @@ const client = new Client({
   id: new Id('1'),
   name: 'Glaucia Lemos',
   email: 'glaucia@email.com',
+  document: '0000',
   address: 'Rua dos Bobos, 0',
 });
 
@@ -39,6 +40,7 @@ describe('Find Client Adm UseCase Unit Test', () => {
     expect(result.name).toEqual(client.name);
     expect(result.email).toEqual(client.email);
     expect(result.address).toEqual(client.address);
+    expect(result.document).toEqual(client.document);
     expect(result.createdAt).toEqual(client.createdAt);
     expect(result.updatedAt).toEqual(client.updatedAt);
   });
