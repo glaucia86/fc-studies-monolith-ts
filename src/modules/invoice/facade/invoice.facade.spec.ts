@@ -1,9 +1,9 @@
 import { Sequelize } from "sequelize-typescript"
 import { InvoiceModel } from "../repository/invoice.model"
 import InvoiceRepository from "../repository/invoice.repository"
-import InvoiceFacade from "./invoice.facade"
-import FindUseCase from "../usecase/find-invoice/find-invoice.usecase";
-import GenerateUseCase from "../usecase/generate-invoice/generate-invoice.usecase";
+import { InvoiceFacade } from "./invoice.facade"
+import GenerateUseCase from "../usecase/generate-invoice/generate-invoice.usecase"
+import FindUseCase from "../usecase/find-invoice/find-invoice.usecase"
 
 
 describe("Invoice Facade test", () => {
