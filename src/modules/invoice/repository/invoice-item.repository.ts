@@ -6,7 +6,7 @@
  */
 
 import Id from "../../@shared/domain/value-object/id.value-object";
-import InvoiceItem from "../domain/product.entity";
+import InvoiceItem from "../domain/invoice-item.entity";
 import InvoiceItemsGateway from "../gateway/invoice-item.gateway";
 import { InvoiceItemModel } from "./invoice-item.model";
 

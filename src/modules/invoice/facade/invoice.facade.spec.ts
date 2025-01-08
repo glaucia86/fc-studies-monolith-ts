@@ -1,7 +1,8 @@
 import { Sequelize } from "sequelize-typescript";
 import InvoiceFacadeFactory from "../factory/facade.factory";
 import { InvoiceModel } from "../repository/invoice.model";
-import { Address } from "../domain/value-object/address.value-object";
+import Address from "../domain/value-object/address.value-object";
+
 
 describe('Invoice Facade Test', () => {
 
@@ -99,7 +100,7 @@ describe('Invoice Facade Test', () => {
       zipCode: '12345-678',
     });
 
-    const result = await invoiceFacade.find({ id: '1' });
+    const result = await invoiceFacade.findInvoice({ id: '1' });
 
     expect(result.id).toEqual(invoiceCreated.id);
     expect(result.name).toEqual(invoiceCreated.name);
