@@ -15,7 +15,8 @@ import StoreCatalogFacadeInterface from "../../../store-catalog/facade/store-cat
 import Client from "../../domain/client.entity";
 import Order from "../../domain/order.entity";
 import Product from "../../domain/product.entity";
-import { CheckoutGateway } from "../../gateway/checkout.gateway";
+import CheckoutGateway from "../../gateway/checkout.gateway";
+
 import { PlaceOrderInputDto, PlaceOrderOutputDto } from "./place-order.dto";
 
 export default class PlaceOrderUseCase implements UseCaseInterface {
@@ -76,20 +77,20 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
     const invoice =
       payment.status === "approved"
         ? await this._invoiceFacade.generate({
-          city: client.address,
-          zipCode: client.address,
-          street: client.address,
-          state: client.address,
-          complement: client.address,
-          number: client.address,
-          name: client.name,
-          document: client.document,
-          items: products.map((p) => ({
-            id: p.id.id,
-            name: p.name,
-            price: p.salesPrice,
-          })),
-        })
+            city: client.address,
+            zipCode: client.address,
+            street: client.address,
+            state: client.address,
+            complement: client.address,
+            number: client.address,
+            name: client.name,
+            document: client.document,
+            items: products.map((p) => ({
+              id: p.id.id,
+              name: p.name,
+              price: p.salesPrice,
+            })),
+          })
         : null;
 
     payment.status === "approved" && order.approved();

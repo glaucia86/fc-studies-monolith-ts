@@ -10,6 +10,8 @@ import Product from "../../domain/product.entity";
 import { PlaceOrderInputDto } from "./place-order.dto";
 import PlaceOrderUseCase from "./place-order.usecase";
 
+
+
 const mockDate = new Date(2025, 1, 1);
 
 describe("PlaceOrderUseCase unit test", () => {
@@ -87,7 +89,7 @@ describe("PlaceOrderUseCase unit test", () => {
 
     it("should throw error when product not found", async () => {
       const mockCatalogFacade = {
-        findById: jest.fn().mockResolvedValue(null),
+        find: jest.fn().mockResolvedValue(null),
       };
 
       //@ts-expect-error - force set catalogFacade
@@ -100,7 +102,7 @@ describe("PlaceOrderUseCase unit test", () => {
 
     it("should return a product", async () => {
       const mockCatalogFacade = {
-        findById: jest.fn().mockResolvedValue({
+        find: jest.fn().mockResolvedValue({
           id: "1",
           name: "Product 1",
           description: "Description 1",
@@ -120,7 +122,7 @@ describe("PlaceOrderUseCase unit test", () => {
         })
       );
 
-      expect(mockCatalogFacade.findById).toHaveBeenCalledTimes(1);
+      expect(mockCatalogFacade.find).toHaveBeenCalledTimes(1);
     });
   });
 

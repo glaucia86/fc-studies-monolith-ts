@@ -5,10 +5,9 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
-import AggregateRoot from "../../@shared/domain/entity/aggregate-root.interface"
-import BaseEntity from "../../@shared/domain/entity/base.entity"
-import Id from "../../@shared/domain/value-object/id.value-object"
-
+import AggregateRoot from "../../@shared/domain/entity/aggregate-root.interface";
+import BaseEntity from "../../@shared/domain/entity/base.entity";
+import Id from "../../@shared/domain/value-object/id.value-object";
 
 type ClientProps = {
   id?: Id;
@@ -18,7 +17,7 @@ type ClientProps = {
   document: string;
   createdAt?: Date;
   updatedAt?: Date;
-}
+};
 
 export default class Client extends BaseEntity implements AggregateRoot {
   private _name: string;
@@ -34,15 +33,15 @@ export default class Client extends BaseEntity implements AggregateRoot {
     this._document = props.document;
   }
 
-  get name(): string {
+  get name() {
     return this._name;
   }
 
-  get email(): string {
+  get email() {
     return this._email;
   }
 
-  get address(): string {
+  get address() {
     return this._address;
   }
 
