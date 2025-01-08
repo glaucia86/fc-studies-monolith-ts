@@ -5,8 +5,6 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
-import ValueObject from "../../../@shared/domain/value-object/value-object.interface";
-
 type AddressProps = {
   street: string;
   number: string;
@@ -14,9 +12,9 @@ type AddressProps = {
   city: string;
   state: string;
   zipCode: string;
-};
+}
 
-export class Address implements ValueObject {
+export default class Address {
   private _street: string;
   private _number: string;
   private _complement: string;
@@ -33,27 +31,28 @@ export class Address implements ValueObject {
     this._zipCode = props.zipCode;
   }
 
-  get street() {
+  get street(): string {
     return this._street;
   }
 
-  get number() {
+  get number(): string {
     return this._number;
   }
 
-  get complement() {
+  get complement(): string {
     return this._complement;
   }
 
-  get city() {
+  get city(): string {
     return this._city;
   }
 
-  get state() {
+  get state(): string {
     return this._state;
   }
 
-  get zipCode() {
+  get zipCode(): string {
     return this._zipCode;
   }
+
 }

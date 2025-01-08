@@ -41,10 +41,10 @@ describe("Invoice Repository test", () => {
       address: new Address(
         "Rua 123",
         "99",
-        "Casa Verde",
-        "Criciúma",
-        "SC",
-        "88888-888"
+        "Main Street",
+        "Rio de Janeiro",
+        "RJ",
+        "00000-000"
       ),
     })
 
@@ -74,10 +74,10 @@ describe("Invoice Repository test", () => {
       document: 'Document 1',
       street: "Rua 123",
       number: "99",
-      complement: "Casa Verde",
-      city: "Criciúma",
-      state: "SC",
-      zipcode: "88888-888",
+      complement: "Main Street",
+      city: "Rio de Janeiro",
+      state: "RJ",
+      zipCode: "00000-000",
       createdAt: new Date(),
       updatedAt: new Date()
     })

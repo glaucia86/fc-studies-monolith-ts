@@ -6,7 +6,7 @@
  */
 
 import Id from "../../../@shared/domain/value-object/id.value-object";
-import InvoiceItem from "../../domain/invoice-item.entity";
+import InvoiceItem from "../../domain/product.entity";
 import GenerateInvoiceUseCase from "./generate-invoice.usecase";
 
 const MockRepository = () => {
