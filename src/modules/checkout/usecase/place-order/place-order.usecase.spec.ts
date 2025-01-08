@@ -87,7 +87,7 @@ describe("PlaceOrderUseCase unit test", () => {
 
     it("should throw error when product not found", async () => {
       const mockCatalogFacade = {
-        find: jest.fn().mockResolvedValue(null),
+        findById: jest.fn().mockResolvedValue(null),
       };
 
       //@ts-expect-error - force set catalogFacade
@@ -100,7 +100,7 @@ describe("PlaceOrderUseCase unit test", () => {
 
     it("should return a product", async () => {
       const mockCatalogFacade = {
-        find: jest.fn().mockResolvedValue({
+        findById: jest.fn().mockResolvedValue({
           id: "1",
           name: "Product 1",
           description: "Description 1",
@@ -120,7 +120,7 @@ describe("PlaceOrderUseCase unit test", () => {
         })
       );
 
-      expect(mockCatalogFacade.find).toHaveBeenCalledTimes(1);
+      expect(mockCatalogFacade.findById).toHaveBeenCalledTimes(1);
     });
   });
 
