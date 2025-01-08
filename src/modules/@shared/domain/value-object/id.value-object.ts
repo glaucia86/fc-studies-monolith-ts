@@ -19,3 +19,4 @@ export default class Id implements ValueObject {
     return this._id;
   }
 }
+
