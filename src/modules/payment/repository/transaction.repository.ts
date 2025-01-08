@@ -1,33 +1,27 @@
-/**
- * file: src/modules/payment/repository/transaction.repository.ts
- * description: file responsible for the definition of the transaction repository.
- * data: 11/18/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import Id from "../../@shared/domain/value-object/id.value-object";
-import Transaction from "../domain/transaction.entity";
+import Transaction from "../domain/transaction";
+import transaction from "../domain/transaction";
 import PaymentGateway from "../gateway/payment.gateway";
 import TransactionModel from "./transaction.model";
 
-export default class TransactionRepository implements PaymentGateway {
-  async save(input: Transaction): Promise<Transaction> {
+export default class TransactionRepostiory implements PaymentGateway {
+  async save(input: transaction): Promise<transaction> {
     await TransactionModel.create({
       id: input.id.id,
-      amount: input.amount,
       orderId: input.orderId,
+      amount: input.amount,
       status: input.status,
       createdAt: input.createdAt,
-      updatedAt: input.updatedAt
+      updatedAt: input.updatedAt,
     });
 
     return new Transaction({
       id: input.id,
-      amount: input.amount,
       orderId: input.orderId,
+      amount: input.amount,
       status: input.status,
       createdAt: input.createdAt,
-      updatedAt: input.updatedAt
+      updatedAt: input.updatedAt,
     });
   }
 }

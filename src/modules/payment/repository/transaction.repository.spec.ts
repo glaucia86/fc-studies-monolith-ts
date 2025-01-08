@@ -1,17 +1,10 @@
-/**
- * file: src/modules/payment/repository/transaction.repository.spec.ts
- * description: file responsible for the definition of the transaction repository test.
- * data: 11/18/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
-import { Sequelize } from "sequelize-typescript"
-import TransactionModel from "./transaction.model";
+import { Sequelize } from "sequelize-typescript";
 import Id from "../../@shared/domain/value-object/id.value-object";
-import Transaction from "../domain/transaction.entity";
-import TransactionRepository from "./transaction.repository";
+import Transaction from "../domain/transaction";
+import TransactionModel from "./transaction.model";
+import TransactionRepostiory from "./transaction.repository";
 
-describe("Transaction Repository Unit Test", () => {
+describe("TransactionRepository test", () => {
   let sequelize: Sequelize;
 
   beforeEach(async () => {
@@ -36,10 +29,9 @@ describe("Transaction Repository Unit Test", () => {
       amount: 100,
       orderId: "1",
     });
-
     transaction.approve();
 
-    const repository = new TransactionRepository();
+    const repository = new TransactionRepostiory();
     const result = await repository.save(transaction);
 
     expect(result.id.id).toBe(transaction.id.id);

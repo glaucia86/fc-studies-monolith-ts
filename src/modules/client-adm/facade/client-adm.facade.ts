@@ -1,32 +1,30 @@
-/**
- * file: src/modules/client-adm/facade/client-adm.facade.ts
- * description: file responsible for the definition of the client admin facade.
- * data: 09/16/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import UseCaseInterface from "../../@shared/usecase/use-case.interface";
-import ClientAdmFacadeInterface, { AddClientFacadeInputDto, FindClientFacadeInputDto, FindClientFacadeOutPutDto } from "./client-adm.facade.interface";
+import ClientAdmFacadeInterface, {
+  AddClientFacadeInputDto,
+  FindClientFacadeInputDto,
+  FindClientFacadeOutputDto,
+} from "./client-adm.facade.interface";
 
 export interface UseCaseProps {
-  findClientUseCase: UseCaseInterface;
-  addClientUseCase: UseCaseInterface;
+  findUsecase: UseCaseInterface;
+  addUsecase: UseCaseInterface;
 }
 
 export default class ClientAdmFacade implements ClientAdmFacadeInterface {
-  private _findClientUseCase: UseCaseInterface;
-  private _addClientUseCase: UseCaseInterface;
+  private _findUsecase: UseCaseInterface;
+  private _addUsecase: UseCaseInterface;
 
-  constructor(useCaseProps: UseCaseProps) {
-    this._findClientUseCase = useCaseProps.findClientUseCase;
-    this._addClientUseCase = useCaseProps.addClientUseCase;
+  constructor(usecaseProps: UseCaseProps) {
+    this._findUsecase = usecaseProps.findUsecase;
+    this._addUsecase = usecaseProps.addUsecase;
   }
 
   async add(input: AddClientFacadeInputDto): Promise<void> {
-    await this._addClientUseCase.execute(input);
+    await this._addUsecase.execute(input);
   }
-
-  async find(input: FindClientFacadeInputDto): Promise<FindClientFacadeOutPutDto> {
-    return await this._findClientUseCase.execute(input);
+  async find(
+    input: FindClientFacadeInputDto
+  ): Promise<FindClientFacadeOutputDto> {
+    return await this._findUsecase.execute(input);
   }
 }

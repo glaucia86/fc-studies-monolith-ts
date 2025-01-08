@@ -1,33 +1,35 @@
-/**
- * file: src/modules/client-adm/facade/client-adm.facade.interface.ts
- * description: file responsible for the definition of the client admin facade interface.
- * data: 09/16/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
+import Id from "../../@shared/domain/value-object/id.value-object";
+import AddressClientDto from "../domain/value-object/address-client.dto";
 
-export interface AddClientFacadeInputDto {
-  id?: string;
-  name: string;
-  email: string;
-  address: string;
-  document: string;
+export interface AddClientFacadeInputDto{
+    id?: Id;
+    name: string;
+    email: string;
+    document: string;
+    address: AddressClientDto;
 }
 
-export interface FindClientFacadeInputDto {
-  id: string;
+export interface FindClientFacadeInputDto{
+    id: string;
 }
 
-export interface FindClientFacadeOutPutDto {
-  id: string;
-  name: string;
-  email: string;
-  address: string;
-  document: string;
-  createdAt: Date;
-  updatedAt: Date;
+export interface FindClientFacadeOutputDto{
+    city: string;
+    complement: string;
+    number: string;
+    state: string;
+    street: string;
+    zipCode: string;
+    id?: string;
+    name: string;
+    document: string;
+    email: string;
+    address: AddressClientDto;
+    createAt: Date;
+    updateAt: Date;
 }
 
-export default interface ClientAdmFacadeInterface {
-  add(input: AddClientFacadeInputDto): Promise<void>
-  find(input: FindClientFacadeInputDto): Promise<FindClientFacadeOutPutDto>
+export default interface ClientAdmFacadeInterface{
+    add(input: AddClientFacadeInputDto): Promise<void>;
+    find(input: FindClientFacadeInputDto): Promise<FindClientFacadeOutputDto>;
 }

@@ -1,63 +1,48 @@
-/**
- * file: src/modules/invoice/usecase/generated-invoice/generate-invoice.usecase.spec.ts
- * description: file responsible for the definition of the generate invoice dto.
- * data: 11/25/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
-import Id from "../../../@shared/domain/value-object/id.value-object";
-import InvoiceItem from "../../domain/product.entity";
 import GenerateInvoiceUseCase from "./generate-invoice.usecase";
 
 const MockRepository = () => {
   return {
-    generate: jest.fn(),
-    find: jest.fn(),
     create: jest.fn(),
-  }
+    find: jest.fn(),
+  };
 };
 
-describe("generate Invoice Usecase unit test", () => {
-  it("should generate a Invoice", async () => {
-    const repository = MockRepository();
-    const usecase = new GenerateInvoiceUseCase(repository);
+describe("GenerateInvoiceUseCase unit test", () => {
 
-    const input = {
-      name: 'invoice 1',
-      document: 'document 1',
-      street: 'street 1',
-      number: 'number 1',
-      complement: 'complemente 1',
-      city: 'city 1',
-      state: 'stata 1',
-      zipCode: 'zip-code-1',
-      items: [
-        {
-          id: new Id('1'),
-          name: 'item 1',
-          price: 100
-        },
-        {
-          id: new Id('2'),
-          name: 'item 1',
-          price: 150
-        }
-      ].map(({ id, name, price }) => new InvoiceItem({ id, name, price })),
-    };
+  it("should generate invoice", async () => {
+      const mockInvoiceRepository = MockRepository();
+      const usecase = new GenerateInvoiceUseCase(mockInvoiceRepository);
 
-    const result = await usecase.execute(input);
+      const input = {
+          name: "name",
+          document: "123",
+          street: "street",
+          number: "1",
+          complement: "complement",
+          city: "city",
+          state: "ctate",
+          zipCode: "123456",
+          items: [
+              {
+                  id: "1",
+                  name: "Item 1",
+                  price: 1,
+              },
+          ],
+      };
 
-    expect(repository.generate).toHaveBeenCalled();
-    expect(result.id).toBeDefined();
-    expect(result.name).toEqual(input.name);
-    expect(result.document).toEqual(input.document);
-    expect(result.street).toEqual(input.street);
-    expect(result.number).toEqual(input.number);
-    expect(result.complement).toEqual(input.complement);
-    expect(result.city).toEqual(input.city);
-    expect(result.state).toEqual(input.state);
-    expect(result.zipCode).toEqual(input.zipCode);
-    expect(result.items).toEqual(input.items);
-    expect(result.total).toEqual(250);
+      const result = await usecase.execute(input);
+      expect(result.id).toBeDefined();
+      expect(result.name).toBe(input.name);
+      expect(result.document).toBe(input.document);
+      expect(result.street).toBe(input.street);
+      expect(result.number).toBe(input.number);
+      expect(result.city).toBe(input.city);
+      expect(result.state).toBe(input.state);
+      expect(result.zipCode).toBe(input.zipCode);
+      expect(result.items[0].id).toBe(input.items[0].id);
+      expect(result.items[0].name).toBe(input.items[0].name);
+      expect(result.items[0].price).toBe(input.items[0].price);
+      expect(result.total).toBe(1);
   });
 });

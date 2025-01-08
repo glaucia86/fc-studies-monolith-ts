@@ -1,38 +1,32 @@
-/**
- * file: src/modules/client-adm/usecase/add-client/add-client.usecase.spec.ts
- * description: file responsible for the implementation of the add client use case test file.
- * data: 08/27/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
+import Client from "../../domain/client.entity";
+import AddressClientDto from "../../domain/value-object/address-client.dto";
 import AddClientUseCase from "./add-client.usecase";
 
 const MockRepository = () => {
   return {
     add: jest.fn(),
-    findById: jest.fn(),
+    find: jest.fn(),
   };
 };
 
-describe('Add Client Adm UseCase unit Test', () => {
-  it('should add a new client', async () => {
-    const clientRepository = MockRepository();
-    const useCase = new AddClientUseCase(clientRepository);
+describe("Add Client Usecase unit test", () => {
+  it("should add a client", async () => {
+    const repository = MockRepository();
+    const usecase = new AddClientUseCase(repository);
 
     const input = {
-      name: 'Glaucia Lemos',
-      email: 'glaucia@email.com',
-      address: '123 Main St',
-      document: '0000'
+      name: "Client 1",
+      email: "x@x.com",
+      document: "doc",
+      address: new AddressClientDto('street', '1', 'city', 'zipcode', 'state', 'complement'),
     };
+    const client = new Client(input);
 
-    const result = await useCase.execute(input);
-
-    expect(clientRepository.add).toHaveBeenCalled();
-    expect(result.id).toBeDefined;
-    expect(result.name).toBe(input.name)
-    expect(result.email).toBe(input.email)
-    expect(result.address).toBe(input.address)
-    expect(result.document).toBe(input.document)
+    const result = await usecase.execute(client);
+    expect(result.id).toBe(client.id.id)
+    expect(result.name).toBe(client.name)
+    expect(result.email).toBe(client.email)
+    expect(result.document).toBe(client.document)
+    expect(result.address.city).toBe(client.address.city)
   });
 });

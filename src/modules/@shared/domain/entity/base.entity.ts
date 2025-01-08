@@ -1,10 +1,3 @@
-/**
- * file: src/modules/@shared/domain/entity/base.entity.ts
- * description: file responsible for the definition of the base entity.
- * data: 07/01/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import Id from "../value-object/id.value-object";
 
 export default class BaseEntity {

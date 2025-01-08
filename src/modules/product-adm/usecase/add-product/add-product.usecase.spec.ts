@@ -1,22 +1,15 @@
-/**
- * file: src/modules/product-adm/usecase/add-product/add-product.usecase.spec.ts
- * description: file responsible for the implementation of the addProduct use case test.
- * data: 07/01/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import AddProductUseCase from "./add-product.usecase";
 
-const MockProductRepository = () => {
+const MockRepository = () => {
   return {
     add: jest.fn(),
-    findById: jest.fn(),
+    find: jest.fn(),
   };
 };
 
 describe("Add Product usecase unit test", () => {
   it("should add a product", async () => {
-    const productRepository = MockProductRepository();
+    const productRepository = MockRepository();
     const usecase = new AddProductUseCase(productRepository);
 
     const input = {

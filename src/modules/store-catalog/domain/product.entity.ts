@@ -1,10 +1,3 @@
-/**
- * file: src/modules/store-catalog/domain/product.entity.ts
- * description: file responsible for the definition of the product entity.
- * data: 08/14/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import AggregateRoot from "../../@shared/domain/entity/aggregate-root.interface";
 import BaseEntity from "../../@shared/domain/entity/base.entity";
 import Id from "../../@shared/domain/value-object/id.value-object";

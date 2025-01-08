@@ -1,24 +1,20 @@
-/**
- * file: src/modules/client-adm/usecase/add-client/add-client.usecase.ts
- * description: file responsible for the definition of the add client use case dto.
- * data: 08/27/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
+import Id from "../../../@shared/domain/value-object/id.value-object";
+import AddressClientDto from "../../domain/value-object/address-client.dto";
 
 export interface AddClientInputDto {
-  id?: string;
+  id?: Id;
   name: string;
   email: string;
-  address: string;
-  document: string;
+  document: string,
+  address: AddressClientDto;
 }
 
 export interface AddClientOutputDto {
-  id: string
+  id: string;
   name: string;
   email: string;
-  document: string;
-  address: string;
+  document: string,
+  address: AddressClientDto;
   createdAt: Date;
   updatedAt: Date;
 }

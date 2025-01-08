@@ -1,15 +1,7 @@
-/**
- * file: src/modules/product-adm/repository/product.repository.spec.ts
- * description: file responsible for the definition of the product repository.
- * data: 08/12/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
-
 import { Sequelize } from "sequelize-typescript";
 import Id from "../../@shared/domain/value-object/id.value-object";
 import Product from "../domain/product.entity";
-import { ProductModel } from "./product.model";
+import ProductModel from "./product.model";
 import ProductRepository from "./product.repository";
 
 describe("ProductRepository test", () => {
@@ -27,9 +19,9 @@ describe("ProductRepository test", () => {
     await sequelize.sync();
   });
 
-  //afterEach(async () => {
-  //  await sequelize.close();
-  //});
+  afterEach(async () => {
+    await sequelize.close();
+  });
 
   it("should create a product", async () => {
     const productProps = {
@@ -67,7 +59,7 @@ describe("ProductRepository test", () => {
       updatedAt: new Date(),
     });
 
-    const product = await productRepository.findById("1");
+    const product = await productRepository.find("1");
 
     expect(product.id.id).toEqual("1");
     expect(product.name).toEqual("Product 1");

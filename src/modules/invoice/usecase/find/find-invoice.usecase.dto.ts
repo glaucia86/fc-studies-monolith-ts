@@ -1,10 +1,3 @@
-/**
- * file: src/modules/invoice/usecase/find-invoice/find-invoice.dto.ts
- * description: file responsible for the definition of the find invoice dto.
- * data: 11/25/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 export interface FindInvoiceUseCaseInputDTO {
   id: string
 }

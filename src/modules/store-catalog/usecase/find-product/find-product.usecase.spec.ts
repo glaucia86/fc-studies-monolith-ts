@@ -1,10 +1,3 @@
-/**
- * file: src/modules/store-catalog/usecase/find-product/find-product.usecase.spec.ts
- * description: file responsible for the definition of the findProduct usecase test.
- * data: 08/15/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import Id from "../../../@shared/domain/value-object/id.value-object";
 import Product from "../../domain/product.entity";
 import FindProductUseCase from "./find-product.usecase";

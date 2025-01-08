@@ -1,27 +1,19 @@
-/**
- * file: src/modules/payment/repository/transaction.model.ts
- * description: file responsible for the definition of the transaction model.
- * data: 11/18/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 @Table({
   tableName: "transactions",
-  timestamps: false
+  timestamps: false,
 })
 export default class TransactionModel extends Model {
-
   @PrimaryKey
   @Column({ allowNull: false })
   id: string;
 
-  @Column({ allowNull: false })
-  amount: number;
-
   @Column({ allowNull: false, field: "order_id" })
   orderId: string;
+
+  @Column({ allowNull: false })
+  amount: number;
 
   @Column({ allowNull: false })
   status: string;

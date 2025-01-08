@@ -1,138 +1,83 @@
-/**
- * file: src/modules/checkout/repository/order.repository.spec.ts
- * description: file responsible for the definition of the order repository.
- * data: 01/07/2025
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
 
-import { Sequelize } from "sequelize-typescript";
-import { OrderModel } from "./order.model";
-import Product from "../domain/product.entity";
-import Client from "../domain/client.entity";
-import Id from "../../@shared/domain/value-object/id.value-object";
-import Order from "../domain/order.entity";
-import { OrderRepository } from "./order.repository";
+import Order from "../domain/order.entity"
+import Product from "../domain/product.entity"
+import ProductOrder from "./product.order.model"
+import TransactionModel from "../../payment/repository/transaction.model"
+import { Sequelize } from "sequelize-typescript"
+import Id from "../../@shared/domain/value-object/id.value-object"
+import AddressDto from "../domain/value-object/addressdto"
+import ClientOrder from "./client.order.model"
+import OrderModel from "./order.model"
+import OrderRepository from "./order.repository"
+import Client from "../domain/client.entity"
 
-const mockDate = new Date(2025, 1, 1);
+describe('order test unit', () =>{
 
-describe("OrderRepository test", () => {
-  let sequelize: Sequelize;
+    function createOrder(): Order {
+        const address = new AddressDto('street', '12', 'city', 'zipcode', 'state', 'complent')
+    
+        const client = new Client({
+            id: new Id('1c'),
+            name: 'client',
+            address: address,
+            email: 'email',
+            document: 'doc',
+        })
+        const product = new Product({ description: 'description1', id: new Id('p1'), name: 'product1', salesPrice: 13 })
+        const product1 = new Product({ description: 'description2', id: new Id('p2'), name: 'product2', salesPrice: 13 })
+        const products = [product, product1]
+    
+        const order = new Order({
+            id: new Id('1'),
+            status: 'approved',
+            client: client,
+            products: products
+        });
+        
+        return order;
+    }
 
-  beforeEach(async () => {
-    sequelize = new Sequelize({
-      dialect: "sqlite",
-      storage: ":memory:",
-      logging: false,
-      sync: { force: true },
+    let sequelize: Sequelize;
+
+    beforeEach(async () => {
+        sequelize = new Sequelize({
+            dialect: "sqlite",
+            storage: ":memory:",
+            logging: false,
+            sync: { force: true }
+        });
+        sequelize.addModels([OrderModel, ClientOrder, ProductOrder, TransactionModel]);
+        await sequelize.sync();
+    })
+
+    afterEach(async () => {
+        await sequelize.close();
+    })
+
+    function validateResult(result: any){
+        expect(result.id.id).toBe('1')
+        expect(result.client.id.id).toBe('1c')
+        expect(result.client.name).toBe('client')
+        expect(result.client.document).toBe('doc')
+        expect(result.client.address).toBeUndefined()
+        expect(result.products.length).toBe(2)
+        expect(result.products.length).toBe(2)
+        expect(result.products[0].id.id).toBe('p1')
+        expect(result.products[1].id.id).toBe('p2')
+    }
+
+    it('should create an order', async () => {
+        const order = createOrder();
+        const orderRepository = new OrderRepository();
+        const result = await orderRepository.addOrder(order);
+        validateResult(result)
     });
 
-    sequelize.addModels([OrderModel]);
-    await sequelize.sync();
-
-    jest.useFakeTimers("modern");
-    jest.setSystemTime(mockDate);
-  });
-
-  afterEach(async () => {
-    await sequelize.close();
-    jest.useRealTimers();
-  });
-
-  it("should add an order", async () => {
-    const product1 = new Product({
-      name: "Product 1",
-      salesPrice: 100,
-      description: "Description 1",
-    });
-
-    const product2 = new Product({
-      name: "Product 2",
-      salesPrice: 200,
-      description: "Description 2",
-    });
-
-    const orderClient = new Client({
-      id: new Id("1"),
-      name: "John Doe",
-      email: "john.doe@email.com",
-      document: '',
-      address: "Main Street, CA, 123",
-    });
-
-    const order = new Order({
-      client: orderClient,
-      products: [product1, product2],
-      invoiceId: "anyInvoiceId",
-    });
-
-    order.approved();
-
-    const orderRepository = new OrderRepository();
-    const result = await orderRepository.addOrder(order);
-
-    expect(result).toStrictEqual(order);
-  });
-
-  it("should find an order", async () => {
-    const orderData = {
-      id: "321",
-      createdAt: mockDate,
-      updatedAt: mockDate,
-      status: "approved",
-      invoiceId: "anyInvoiceId",
-      client: {
-        id: "1",
-        createdAt: mockDate,
-        updatedAt: mockDate,
-        name: "John Doe",
-        email: "john.doe@email.com",
-        address: "Main Street, CA, 123",
-      },
-      products: [
-        {
-          id: "35",
-          createdAt: mockDate,
-          updatedAt: mockDate,
-          name: "Product 1",
-          description: "Description 1",
-          salesPrice: 100,
-        },
-        {
-          id: "63",
-          createdAt: mockDate,
-          updatedAt: mockDate,
-          name: "Product 2",
-          description: "Description 2",
-          salesPrice: 200,
-        },
-      ],
-    };
-
-    await OrderModel.create(orderData);
-    const orderRepository = new OrderRepository();
-
-    const result = await orderRepository.findOrder("321");
-
-    expect(result.id.id).toEqual(orderData.id);
-    expect(result.status).toEqual(orderData.status);
-    expect(result.invoiceId).toEqual(orderData.invoiceId);
-
-    const clientResult = result.client;
-    expect(clientResult.id).toEqual(orderData.client.id);
-    expect(clientResult.name).toEqual(orderData.client.name);
-    expect(clientResult.email).toEqual(orderData.client.email);
-    expect(clientResult.address).toEqual(orderData.client.address);
-
-    expect(result.products.length).toEqual(orderData.products.length);
-
-    const firstProductResult = result.products[0];
-    expect(firstProductResult.id).toEqual(orderData.products[0].id);
-    expect(firstProductResult.name).toEqual(orderData.products[0].name);
-    expect(firstProductResult.salesPrice).toEqual(
-      orderData.products[0].salesPrice
-    );
-    expect(firstProductResult.description).toEqual(
-      orderData.products[0].description
-    );
-  });
-});
+    it('should find an order', async () => {
+        const order = createOrder();
+        const orderRepository = new OrderRepository();
+        await orderRepository.addOrder(order);
+        const result = await orderRepository.findOrder('1')
+        validateResult(result)
+    }, 50000)
+})

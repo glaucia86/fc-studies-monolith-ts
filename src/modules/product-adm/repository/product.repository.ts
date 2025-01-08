@@ -1,17 +1,10 @@
-/**
- * file: src/modules/product-adm/repository/product.repository.ts
- * description: file responsible for the definition of the product repository.
- * data: 08/12/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import Id from "../../@shared/domain/value-object/id.value-object";
 import Product from "../domain/product.entity";
 import ProductGateway from "../gateway/product.gateway";
-import { ProductModel } from "./product.model";
+import ProductModel from "./product.model";
 
 export default class ProductRepository implements ProductGateway {
-  async add(product: Product): Promise<void> { // Adicione o tipo de retorno
+  async add(product: Product): Promise<void> {
     await ProductModel.create({
       id: product.id.id,
       name: product.name,
@@ -22,8 +15,7 @@ export default class ProductRepository implements ProductGateway {
       updatedAt: new Date(),
     });
   }
-
-  async findById(id: string): Promise<Product> { // Adicione o tipo de retorno
+  async find(id: string): Promise<Product> {
     const product = await ProductModel.findOne({
       where: { id },
     });

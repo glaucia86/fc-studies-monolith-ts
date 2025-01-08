@@ -1,10 +1,3 @@
-/**
- * file: src/modules/store-catalog/usecase/find-all-products/find-products.usecase.spec.ts
- * description: file responsible for the implementantion of the findProduct usecase.
- * data: 08/14/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import Id from "../../../@shared/domain/value-object/id.value-object";
 import Product from "../../domain/product.entity";
 import FindAllProductsUsecase from "./find-all-products.usecase";

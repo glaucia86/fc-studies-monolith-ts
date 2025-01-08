@@ -1,27 +1,25 @@
-/**
- * file: src/modules/payment/usecase/process-payment/process-payment.usecase.ts
- * description: file responsible for the definition of the process payment usecase.
- * data: 10/07/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import UseCaseInterface from "../../../@shared/usecase/use-case.interface";
-import Transaction from "../../domain/transaction.entity";
+import Transaction from "../../domain/transaction";
 import PaymentGateway from "../../gateway/payment.gateway";
-import { ProcessPaymentInputDto, ProcessPaymentOutputDto } from "./process-payment.dto";
+import {
+  ProcessPaymentInputDto,
+  ProcessPaymentOutputDto,
+} from "./process-payment.dto";
 
 export default class ProcessPaymentUseCase implements UseCaseInterface {
-  constructor(private transactionRepository: PaymentGateway) { }
+  constructor(private transactionRepository: PaymentGateway) {}
 
-  async execute(input: ProcessPaymentInputDto): Promise<ProcessPaymentOutputDto> {
+  async execute(
+    input: ProcessPaymentInputDto
+  ): Promise<ProcessPaymentOutputDto> {
     const transaction = new Transaction({
       amount: input.amount,
-      orderId: input.orderId
+      orderId: input.orderId,
     });
-
     transaction.process();
-
-    const persistTransaction = await this.transactionRepository.save(transaction);
+    const persistTransaction = await this.transactionRepository.save(
+      transaction
+    );
 
     return {
       transactionId: persistTransaction.id.id,
@@ -29,7 +27,7 @@ export default class ProcessPaymentUseCase implements UseCaseInterface {
       amount: persistTransaction.amount,
       status: persistTransaction.status,
       createdAt: persistTransaction.createdAt,
-      updatedAt: persistTransaction.updatedAt
+      updatedAt: persistTransaction.updatedAt,
     };
   }
 }

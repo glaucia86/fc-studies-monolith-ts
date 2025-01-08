@@ -1,13 +1,10 @@
-/**
- * file: src/modules/store-catalog/facade/store-catalog.facade.ts
- * description: file responsible for the definition of the product admin facade.
- * data: 08/19/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import FindAllProductsUsecase from "../usecase/find-all-products/find-all-products.usecase";
 import FindProductUseCase from "../usecase/find-product/find-product.usecase";
-import StoreCatalogFacadeInterface, { FindAllStoreCatalogFacadeOutputDto, FindStoreCatalogFacadeInputDto, FindStoreCatalogFacadeOutputDto } from "./store-catalog.facade.interface.dto";
+import StoreCatalogFacadeInterface, {
+  FindAllStoreCatalogFacadeOutputDto,
+  FindStoreCatalogFacadeInputDto,
+  FindStoreCatalogFacadeOutputDto,
+} from "./store-catalog.facade.interface";
 
 export interface UseCaseProps {
   findUseCase: FindProductUseCase;

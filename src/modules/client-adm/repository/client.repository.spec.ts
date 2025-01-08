@@ -1,17 +1,11 @@
-/**
- * file: src/modules/client-adm/repository/client.repository.spec.ts
- * description: file responsible for the implementation of the client repository tests.
- * data: 09/02/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import { Sequelize } from "sequelize-typescript";
 import Id from "../../@shared/domain/value-object/id.value-object";
-import ClientRepository from "./client.repository";
 import Client from "../domain/client.entity";
-import { ClientModel } from "./client.model";
+import AddressClientDto from "../domain/value-object/address-client.dto";
+import ClientModel from "./client.model";
+import ClientRepository from "./client.repository";
 
-describe('ClientRepository test', () => {
+describe("ClientRepository test", () => {
   let sequelize: Sequelize;
 
   beforeEach(async () => {
@@ -26,51 +20,57 @@ describe('ClientRepository test', () => {
     await sequelize.sync();
   });
 
-  it('should create a client', async () => {
-    const clientProps = new Client({
-      id: new Id("1"),
-      name: "Client 1",
-      email: "client@email.com",
-      address: "Client 1 address",
-      document: '0000',
-    });
-
-    const clientRepository = new ClientRepository();
-    await clientRepository.add(clientProps);
-
-    const clientDb = await ClientModel.findOne({
-      where: { id: clientProps.id.id },
-    });
-
-    expect(clientDb).toBeDefined();
-    expect(clientDb.name).toEqual(clientProps.name);
-    expect(clientDb.email).toEqual(clientProps.email);
-    expect(clientDb.address).toEqual(clientProps.address);
-    expect(clientDb.document).toEqual(clientProps.document);
-    expect(clientDb.createdAt).toStrictEqual(clientProps.createdAt);
-    expect(clientDb.updatedAt).toStrictEqual(clientProps.updatedAt);
+  afterEach(async () => {
+    await sequelize.close();
   });
 
-  it('should find a client', async () => {
+  it("should create a client", async () => {
+    const client = new Client({
+      id: new Id("1"),
+      name: "Client 1",
+      email: "x@x.com",
+      document:"doc",
+      address: new AddressClientDto('street', '1', 'city', 'zipcode', 'state', 'complement'),
+    });
+
+    const repository = new ClientRepository();
+    await repository.add(client);
+
+    const clientDb = await ClientModel.findOne({ where: { id: "1" } });
+
+    expect(clientDb).toBeDefined();
+    expect(clientDb.id).toBe(client.id.id);
+    expect(clientDb.name).toBe(client.name);
+    expect(clientDb.email).toBe(client.email);
+    expect(clientDb.document).toBe(client.document);
+    expect(clientDb.createdAt).toStrictEqual(client.createdAt);
+    expect(clientDb.updatedAt).toStrictEqual(client.updatedAt);
+  });
+
+  it("should find a client", async () => {
     const client = await ClientModel.create({
       id: "1",
       name: "Client 1",
-      email: "client@email.com",
-      address: "Client 1 address",
-      document: '0000',
+      email: "x@x.com",
+      document:"doc",
+      street: 'street',
+      state: 'state',
+      complement: 'complement',
+      zipCode: 'zipcode',
+      number: '2',
+      city: 'city',
       createdAt: new Date(),
       updatedAt: new Date(),
     });
 
-    const clientRepository = new ClientRepository();
-    const clientResult = await clientRepository.findById(client.id);
+    const repository = new ClientRepository();
+    const result = await repository.find(client.id);
 
-    expect(clientResult.id.id).toEqual(client.id);
-    expect(clientResult.name).toEqual(client.name);
-    expect(clientResult.email).toEqual(client.email);
-    expect(clientResult.address).toEqual(client.address);
-    expect(clientResult.document).toEqual(client.document);
-    expect(clientResult.createdAt).toEqual(client.createdAt);
-    expect(clientResult.updatedAt).toEqual(client.updatedAt);
+    expect(result.id.id).toEqual(client.id);
+    expect(result.name).toEqual(client.name);
+    expect(result.email).toEqual(client.email);
+    expect(result.document).toEqual(client.document);
+    expect(result.createdAt).toStrictEqual(client.createdAt);
+    expect(result.updatedAt).toStrictEqual(client.updatedAt);
   });
 });

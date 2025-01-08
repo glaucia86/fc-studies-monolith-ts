@@ -1,27 +1,32 @@
-/**
- * file: src/modules/store-catalog/repository/product.model.ts
- * description: file responsible for the definition of the product model.
- * data: 08/15/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 @Table({
   tableName: "products",
   timestamps: false,
 })
-export class ProductModel extends Model {
+export default class ProductStoreModel extends Model {
   @PrimaryKey
   @Column({ allowNull: false })
-  declare id: string;
+  id: string;
 
   @Column({ allowNull: false })
-  declare name: string;
+  name: string;
 
   @Column({ allowNull: false })
-  declare description: string;
+  description: string;
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: true })
+  purchasePrice: number;
+
+  @Column({ allowNull: true })
+  declare stock: number;
+
+  @Column({ allowNull: true })
   declare salesPrice: number;
+
+  @Column({allowNull: true})
+  declare createdAt: Date;
+
+  @Column({allowNull: true})
+  declare updatedAt: Date;
 }

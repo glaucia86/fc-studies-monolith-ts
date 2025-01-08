@@ -1,14 +1,9 @@
-/**
- * file: src/modules/client-adm/repository/client.repository.ts
- * description: file responsible for the definition of the client repository.
- * data: 09/02/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import Id from "../../@shared/domain/value-object/id.value-object";
 import Client from "../domain/client.entity";
+import AddressClientDto from "../domain/value-object/address-client.dto";
 import ClientGateway from "../gateway/client.gateway";
-import { ClientModel } from "./client.model";
+import ClientModel from "./client.model";
+import ClientEntity from "../domain/client.entity";
 
 export default class ClientRepository implements ClientGateway {
   async add(client: Client): Promise<void> {
@@ -16,30 +11,34 @@ export default class ClientRepository implements ClientGateway {
       id: client.id.id,
       name: client.name,
       email: client.email,
-      address: client.address,
       document: client.document,
+      street: client.address.street,
+      city: client.address.city,
+      state: client.address.state,
+      number: client.address.number,
+      zipCode: client.address.zipCode,
+      complement: client.address.complement,
       createdAt: client.createdAt,
       updatedAt: client.updatedAt,
     });
   }
+  async find(id: string): Promise<Client> {
+    const result = await ClientModel.findOne({ where: { id: id } });
 
-  async findById(id: string): Promise<Client> {
-    const client = await ClientModel.findOne({
-      where: { id },
-    });
-
-    if (!client) {
-      throw new Error(`Client with id ${id} not found`);
+    if (!result) {
+      throw new Error("Client not found");
     }
-
-    return new Client({
+    const client = result.dataValues
+    const props = { 
       id: new Id(client.id),
       name: client.name,
       email: client.email,
-      address: client.address,
+      address: new AddressClientDto(client.street, client.number, client.city,
+        client.zipCode, client.state, client.complement),
       document: client.document,
       createdAt: client.createdAt,
-      updatedAt: client.updatedAt
-    });
+      updatedAt: client.updatedAt,
+    };
+    return new ClientEntity(props);
   }
 }

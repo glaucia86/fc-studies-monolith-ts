@@ -1,36 +1,32 @@
-/**
- * file: src/modules/product-adm/repository/product.model.ts
- * description: file responsible for the definition of the product model.
- * data: 08/13/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 @Table({
   tableName: "products",
   timestamps: false,
 })
-export class ProductModel extends Model {
+export default class ProductModel extends Model {
   @PrimaryKey
   @Column({ allowNull: false })
-  declare id: string;
+  id: string;
 
   @Column({ allowNull: false })
-  declare name: string;
+  name: string;
 
   @Column({ allowNull: false })
-  declare description: string;
+  description: string;
 
   @Column({ allowNull: false })
-  declare purchasePrice: number;
+  purchasePrice: number;
+  
+  @Column({allowNull: true})
+  declare salesPrice: number;
 
   @Column({ allowNull: false })
-  declare stock: number;
+  stock: number;
 
   @Column({ allowNull: false })
-  declare createdAt: Date;
+  createdAt: Date;
 
   @Column({ allowNull: false })
-  declare updatedAt: Date;
+  updatedAt: Date;
 }

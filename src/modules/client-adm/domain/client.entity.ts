@@ -1,36 +1,30 @@
-/**
- * file: src/modules/client-adm/domain/client.entity.ts
- * description: file responsible for the definition of the client entity.
- * data: 08/27/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
-import AggregateRoot from "../../@shared/domain/entity/aggregate-root.interface"
-import BaseEntity from "../../@shared/domain/entity/base.entity"
-import Id from "../../@shared/domain/value-object/id.value-object"
+import AggregateRoot from "../../@shared/domain/entity/aggregate-root.interface";
+import BaseEntity from "../../@shared/domain/entity/base.entity";
+import Id from "../../@shared/domain/value-object/id.value-object";
+import AddressClientDto from "./value-object/address-client.dto";
 
 type ClientProps = {
-  id?: Id
+  id?: Id;
   name: string;
   email: string;
-  address: string;
   document: string;
+  address: AddressClientDto;
   createdAt?: Date;
   updatedAt?: Date;
-}
+};
 
 export default class Client extends BaseEntity implements AggregateRoot {
   private _name: string;
   private _email: string;
-  private _address: string;
+  private _address: AddressClientDto;
   private _document: string;
 
   constructor(props: ClientProps) {
     super(props.id, props.createdAt, props.updatedAt);
     this._name = props.name;
     this._email = props.email;
-    this._address = props.address;
     this._document = props.document;
+    this._address = props.address;
   }
 
   get name(): string {
@@ -41,11 +35,11 @@ export default class Client extends BaseEntity implements AggregateRoot {
     return this._email;
   }
 
-  get address(): string {
-    return this._address;
-  }
-
   get document(): string {
     return this._document;
+  }
+
+  get address(): AddressClientDto {
+    return this._address;
   }
 }

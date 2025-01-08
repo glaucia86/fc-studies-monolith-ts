@@ -1,32 +1,23 @@
-/**
- * file: src/modules/checkout/repository/order.model.ts
- * description: file responsible for the definition of the order model.
- * data: 01/07/2025
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
-import { Column, DataType, Model, PrimaryKey, Table } from "sequelize-typescript";
-import Client from "../domain/client.entity";
-import Product from "../domain/product.entity";
+import {Table, Model, PrimaryKey, Column, HasMany, ForeignKey, BelongsTo } from "sequelize-typescript";
+import ClientOrder from "./client.order.model";
+import ProductOrder from "./product.order.model";
 
 @Table({
-  tableName: 'orders',
-  timestamps: false
+    tableName: 'order',
+    timestamps: false
 })
-export class OrderModel extends Model {
-  @PrimaryKey
-  @Column({ allowNull: false })
-  declare id: string;
+export default class OrderModel extends Model{
 
-  @Column({ allowNull: false })
-  declare status: string;
+    @PrimaryKey
+    @Column({allowNull: false})
+    declare id: string;
 
-  @Column({ allowNull: false })
-  declare invoiceId: string;
+    @ForeignKey(() => ClientOrder)
+    declare client_id: string;
 
-  @Column({ allowNull: false, type: DataType.JSON })
-  declare client: Client;
+    @BelongsTo(() => ClientOrder)
+    declare client: ClientOrder;
 
-  @Column({ allowNull: false, type: DataType.JSON })
-  declare products: Product[];
+    @HasMany(() => ProductOrder, {onUpdate: 'CASCADE'})
+    declare products?: ProductOrder[];
 }

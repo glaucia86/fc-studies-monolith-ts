@@ -1,13 +1,6 @@
-/**
- * file: src/modules/payment/domain/transaction.ts
- * description: file responsible for the definition of the transaction entity.
- * data: 10/07/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import AggregateRoot from "../../@shared/domain/entity/aggregate-root.interface";
 import BaseEntity from "../../@shared/domain/entity/base.entity";
-import Id from "../../@shared/domain/value-object/id.value-object"
+import Id from "../../@shared/domain/value-object/id.value-object";
 
 type TransactionProps = {
   id?: Id;
@@ -16,7 +9,7 @@ type TransactionProps = {
   status?: string;
   createdAt?: Date;
   updatedAt?: Date;
-}
+};
 
 export default class Transaction extends BaseEntity implements AggregateRoot {
   private _amount: number;
@@ -24,25 +17,25 @@ export default class Transaction extends BaseEntity implements AggregateRoot {
   private _status: string;
 
   constructor(props: TransactionProps) {
-    super(props.id, props.createdAt, props.updatedAt);
+    super(props.id);
     this._amount = props.amount;
     this._orderId = props.orderId;
-    this._status = props.status || 'pending';
+    this._status = props.status || "pending";
     this.validate();
   }
 
   validate(): void {
-    if (this.amount <= 0) {
-      throw new Error('Amount must be greater than 0');
+    if (this._amount <= 0) {
+      throw new Error("Amount must be greater than 0");
     }
   }
 
   approve(): void {
-    this._status = 'approved';
+    this._status = "approved";
   }
 
   decline(): void {
-    this._status = 'declined';
+    this._status = "declined";
   }
 
   process(): void {

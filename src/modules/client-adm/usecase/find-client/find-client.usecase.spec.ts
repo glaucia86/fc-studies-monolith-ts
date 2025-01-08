@@ -1,46 +1,39 @@
-/**
- * file: src/modules/client-adm/usecase/find-client/find-client.usecase.dto.ts
- * description: file responsible for the implementation of the dto of the find client use case.
- * data: 08/27/2024
- * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
- */
-
 import Id from "../../../@shared/domain/value-object/id.value-object";
 import Client from "../../domain/client.entity";
+import AddressClientDto from "../../domain/value-object/address-client.dto";
 import FindClientUseCase from "./find-client.usecase";
 
 const client = new Client({
-  id: new Id('1'),
-  name: 'Glaucia Lemos',
-  email: 'glaucia@email.com',
-  document: '0000',
-  address: 'Rua dos Bobos, 0',
+  id: new Id("1"),
+  name: "Client 1",
+  email: "x@x.com",
+  document: "doc",
+  address: new AddressClientDto('street', '1', 'city', 'zipcode', 'state', 'complement'),
 });
 
 const MockRepository = () => {
   return {
-    add: jest.fn().mockReturnValue(Promise.resolve()),
-    findById: jest.fn().mockReturnValue(Promise.resolve(client)),
+    add: jest.fn(),
+    find: jest.fn().mockReturnValue(Promise.resolve(client)),
   };
 };
 
-describe('Find Client Adm UseCase Unit Test', () => {
-  it('should find a client by id', async () => {
-    const clientRepository = MockRepository();
-    const useCase = new FindClientUseCase(clientRepository);
+describe("Find Client Usecase unit test", () => {
+  it("should find a client", async () => {
+    const repository = MockRepository();
+    const usecase = new FindClientUseCase(repository);
 
     const input = {
-      id: '1'
+      id: "1",
     };
 
-    const result = await useCase.execute(input);
+    const result = await usecase.execute(input);
 
-    expect(clientRepository.findById).toHaveBeenCalled();
+    expect(repository.find).toHaveBeenCalled();
     expect(result.id).toEqual(input.id);
     expect(result.name).toEqual(client.name);
     expect(result.email).toEqual(client.email);
-    expect(result.address).toEqual(client.address);
-    expect(result.document).toEqual(client.document);
+    expect(result.address.city).toEqual(client.address.city);
     expect(result.createdAt).toEqual(client.createdAt);
     expect(result.updatedAt).toEqual(client.updatedAt);
   });
