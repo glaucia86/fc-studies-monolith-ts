@@ -2,11 +2,10 @@ import { Sequelize } from "sequelize-typescript";
 import InvoiceModel from "../repository/transaction.model";
 import InvoiceItemModel from "../repository/transaction.item.model";
 import InvoiceRepository from "../repository/transaction.repository";
-import GenerateInvoiceUseCase from "../usecase/find/find-invoice.usecase";
-
+import GenerateInvoiceUseCase from "../usecase/generate/generate-invoice.usecase";
+import InvoiceFacade from "./invoice.facade";
 import FindInvoiceUseCase from "../usecase/find/find-invoice.usecase";
 import InvoiceFacadeFactory from "../factory/invoice.facade.factory";
-import InvoiceFacade from "./invoice.facade";
 
 describe("InvoiceRepository test", () => {
   let sequelize: Sequelize;
@@ -18,7 +17,8 @@ describe("InvoiceRepository test", () => {
       logging: false,
       sync: { force: true }
     });
-    await sequelize.addModels([InvoiceModel, InvoiceItemModel]);
+
+    sequelize.addModels([InvoiceModel, InvoiceItemModel]);
     await sequelize.sync();
   });
 

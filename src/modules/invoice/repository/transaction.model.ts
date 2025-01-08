@@ -1,7 +1,6 @@
 import { Column, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
 import InvoiceItemModel from "./transaction.item.model";
 
-
 @Table({
   tableName: "invoices",
   timestamps: false,
