@@ -8,7 +8,7 @@
 import UseCaseInterface from "../../../@shared/usecase/use-case.interface";
 import ProductGateway from "../../gateway/product.gateway";
 
-export default class FindAllProductsUseCase implements UseCaseInterface {
+export default class FindAllProductsUsecase implements UseCaseInterface {
   constructor(private productRepository: ProductGateway) { }
 
   async execute(): Promise<any> {
@@ -19,7 +19,7 @@ export default class FindAllProductsUseCase implements UseCaseInterface {
         id: product.id.id,
         name: product.name,
         description: product.description,
-        salesPrice: product.salesPrice
+        salesPrice: product.salesPrice,
       })),
     };
   }

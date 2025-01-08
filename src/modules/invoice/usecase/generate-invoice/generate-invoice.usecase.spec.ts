@@ -13,7 +13,7 @@ const MockRepository = () => {
   return {
     generate: jest.fn(),
     find: jest.fn(),
-  };
+  }
 };
 
 describe("generate Invoice Usecase unit test", () => {

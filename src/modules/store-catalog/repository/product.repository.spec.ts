@@ -6,10 +6,10 @@
  */
 
 import { Sequelize } from "sequelize-typescript";
-import ProductModel from "./product.model";
+import { ProductModel } from "./product.model";
 import ProductRepository from "./product.repository";
 
-describe("ProductRepository Test", () => {
+describe("ProductRepository test", () => {
   let sequelize: Sequelize;
 
   beforeEach(async () => {
@@ -24,19 +24,22 @@ describe("ProductRepository Test", () => {
     await sequelize.sync();
   });
 
-  it("should find all products", async () => {
+  afterEach(async () => {
+    await sequelize.close();
+  });
 
-    ProductModel.create({
+  it("should find all products", async () => {
+    await ProductModel.create({
       id: "1",
       name: "Product 1",
-      description: "Product 1 description",
+      description: "Description 1",
       salesPrice: 100,
     });
 
-    ProductModel.create({
+    await ProductModel.create({
       id: "2",
       name: "Product 2",
-      description: "Product 2 description",
+      description: "Description 2",
       salesPrice: 200,
     });
 
@@ -44,32 +47,30 @@ describe("ProductRepository Test", () => {
     const products = await productRepository.findAll();
 
     expect(products.length).toBe(2);
-    expect(products[0].id.id).toEqual("1");
-    expect(products[0].name).toEqual("Product 1");
-    expect(products[0].description).toEqual("Product 1 description");
-    expect(products[0].salesPrice).toEqual(100);
-
-    expect(products[1].id.id).toEqual("2");
-    expect(products[1].name).toEqual("Product 2");
-    expect(products[1].description).toEqual("Product 2 description");
-    expect(products[1].salesPrice).toEqual(200);
+    expect(products[0].id.id).toBe("1");
+    expect(products[0].name).toBe("Product 1");
+    expect(products[0].description).toBe("Description 1");
+    expect(products[0].salesPrice).toBe(100);
+    expect(products[1].id.id).toBe("2");
+    expect(products[1].name).toBe("Product 2");
+    expect(products[1].description).toBe("Description 2");
+    expect(products[1].salesPrice).toBe(200);
   });
 
   it("should find a product", async () => {
-    const productRepository = new ProductRepository();
-
-    ProductModel.create({
+    await ProductModel.create({
       id: "1",
       name: "Product 1",
-      description: "Product 1 description",
+      description: "Description 1",
       salesPrice: 100,
     });
 
-    const product = await productRepository.findById("1");
+    const productRepository = new ProductRepository();
+    const product = await productRepository.find("1");
 
-    expect(product.id.id).toEqual("1");
-    expect(product.name).toEqual("Product 1");
-    expect(product.description).toEqual("Product 1 description");
-    expect(product.salesPrice).toEqual(100);
+    expect(product.id.id).toBe("1");
+    expect(product.name).toBe("Product 1");
+    expect(product.description).toBe("Description 1");
+    expect(product.salesPrice).toBe(100);
   });
 });
