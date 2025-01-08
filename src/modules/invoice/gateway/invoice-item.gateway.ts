@@ -5,7 +5,7 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
-import InvoiceItem from "../domain/invoice-item.entity";
+import InvoiceItem from "../domain/product.entity";
 
 export default interface InvoiceItemsGateway {
   generate(invoiceItem: InvoiceItem): Promise<void>;
