@@ -6,42 +6,36 @@
  */
 
 import Id from "../../../@shared/domain/value-object/id.value-object";
-import InvoiceItem from "../../domain/invoice-item.entity";
 import Invoice from "../../domain/invoice.entity";
 import Address from "../../domain/value-object/address.value-object";
 import InvoiceGateway from "../../gateway/invoice.gateway";
 import { GenerateInvoiceUseCaseInputDto, GenerateInvoiceUseCaseOutputDto } from "./generate-invoice.dto";
 
 export default class GenerateInvoiceUseCase {
-  private _invoiceRepository: InvoiceGateway;
+  private _clientRepository: InvoiceGateway;
 
-  constructor(_invoiceRepository: InvoiceGateway) {
-    this._invoiceRepository = _invoiceRepository;
+  constructor(clientRepository: InvoiceGateway) {
+    this._clientRepository = clientRepository;
   }
 
   async execute(input: GenerateInvoiceUseCaseInputDto): Promise<GenerateInvoiceUseCaseOutputDto> {
-    const invoiceProps = {
+    const props = {
+      id: new Id(input.id) || new Id(),
       name: input.name,
       document: input.document,
-      address: new Address(
-        input.street,
-        input.number,
-        input.complement,
-        input.city,
-        input.state,
-        input.zipCode,
-      ),
-      items: input.items.map((item) => {
-        return new InvoiceItem({
-          id: new Id(item.id),
-          name: item.name,
-          price: item.price,
-        });
+      address: new Address({
+        street: input.street,
+        number: input.number,
+        complement: input.complement,
+        city: input.city,
+        state: input.state,
+        zipCode: input.zipCode,
       }),
+      items: input.items
     }
 
-    const invoice = new Invoice(invoiceProps);
-    await this._invoiceRepository.generate(invoice);
+    const invoice = new Invoice(props)
+    await this._clientRepository.generate(invoice);
 
     return {
       id: invoice.id.id,
@@ -53,13 +47,8 @@ export default class GenerateInvoiceUseCase {
       city: invoice.address.city,
       state: invoice.address.state,
       zipCode: invoice.address.zipCode,
-      items: invoice.items.map((item) => ({
-        id: item.id.id,
-        name: item.name,
-        price: item.price,
-      })),
-      total: invoice.total(),
+      items: invoice.items,
+      total: invoice.items.reduce((prev, curr) => prev + curr.price, 0),
     }
   }
 }
-

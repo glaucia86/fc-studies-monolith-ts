@@ -1,28 +1,36 @@
-import UseCaseInterface from "../../@shared/usecase/use-case.interface";
-import InvoiceFacadeInterface, { FindInvoiceFacadeInputDTO, FindInvoiceFacadeOutputDTO, GenerateInvoiceFacadeInputDto, GenerateInvoiceFacadeOutputDto } from "./invoice.facade.interface.dto";
 
+import UseCaseInterface from "../../@shared/usecase/use-case.interface";
+import {
+  FindInvoiceFacadeInputDto,
+  FindInvoiceFacadeOutputDto,
+  GenerateInvoiceFacadeInputDto,
+  GenerateInvoiceFacadeOutputDto,
+  InvoiceFacadeInterface,
+} from "./invoice.facade.interface";
 
 export interface UseCaseProps {
-  addInvoiceUseCase: UseCaseInterface;
-  findInvoiceUseCase: UseCaseInterface;
+  generateUseCase: UseCaseInterface;
+  findUsecase: UseCaseInterface;
 }
 
-export default class InvoiceFacade implements InvoiceFacadeInterface {
+export class InvoiceFacade implements InvoiceFacadeInterface {
+  private _generateUseCase: UseCaseInterface;
+  private _findUseCase: UseCaseInterface;
 
-  private _addInvoiceUseCase: UseCaseInterface;
-  private _findInvoiceUseCase: UseCaseInterface;
-
-  constructor(props: UseCaseProps) {
-    this._addInvoiceUseCase = props.addInvoiceUseCase;
-    this._findInvoiceUseCase = props.findInvoiceUseCase;
+  constructor(useCasesProps: UseCaseProps) {
+    this._generateUseCase = useCasesProps.generateUseCase;
+    this._findUseCase = useCasesProps.findUsecase;
   }
 
-  async generateInvoice(input: GenerateInvoiceFacadeInputDto): Promise<GenerateInvoiceFacadeOutputDto> {
-    return await this._addInvoiceUseCase.execute(input);
+  async generate(
+    input: GenerateInvoiceFacadeInputDto
+  ): Promise<GenerateInvoiceFacadeOutputDto> {
+    return await this._generateUseCase.execute(input);
   }
 
-  async findInvoice(input: FindInvoiceFacadeInputDTO): Promise<FindInvoiceFacadeOutputDTO> {
-    return await this._findInvoiceUseCase.execute(input);
+  async find(
+    input: FindInvoiceFacadeInputDto
+  ): Promise<FindInvoiceFacadeOutputDto> {
+    return await this._findUseCase.execute(input);
   }
-
 }

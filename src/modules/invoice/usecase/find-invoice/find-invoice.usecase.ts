@@ -8,39 +8,25 @@
 import InvoiceGateway from "../../gateway/invoice.gateway";
 import { FindInvoiceUseCaseInputDto, FindInvoiceUseCaseOutputDto } from "./find-invoice.dto";
 
-export default class FindInvoiceUseCase {
-  private _invoiceRepository: InvoiceGateway;
 
-  constructor(invoiceRepository: InvoiceGateway) {
-    this._invoiceRepository = invoiceRepository;
+export default class GenerateInvoiceUseCase {
+  private _clientRepository: InvoiceGateway;
+
+  constructor(clientRepository: InvoiceGateway) {
+      this._clientRepository = clientRepository;
   }
 
   async execute(input: FindInvoiceUseCaseInputDto): Promise<FindInvoiceUseCaseOutputDto> {
-    const invoice = await this._invoiceRepository.find(input.id);
+      const result = await this._clientRepository.find(input.id);
 
-    if (!invoice) {
-      throw new Error('Invoice not found');
-    }
-
-    return {
-      id: invoice.id.id,
-      name: invoice.name,
-      document: invoice.document,
-      address: {
-        street: invoice.address.street,
-        number: invoice.address.number,
-        complement: invoice.address.complement,
-        city: invoice.address.city,
-        state: invoice.address.state,
-        zipCode: invoice.address.zipCode,
-      },
-      items: invoice.items.map(item => ({
-        id: item.id.id,
-        name: item.name,
-        price: item.price,
-      })),
-      total: invoice.total(),
-      createdAt: invoice.createdAt,
-    };
+      return {
+          id: result.id.id,
+          name: result.name,
+          document: result.document,
+          address: result.address,
+          items: result.items,
+          total: result?.items?.reduce((prev, curr) => prev + curr.price, 0),
+          createdAt: result.createdAt,
+      }
   }
 }

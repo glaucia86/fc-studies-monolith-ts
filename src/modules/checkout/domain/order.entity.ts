@@ -24,7 +24,7 @@ export default class Order extends BaseEntity {
   private _status: string;
   private _invoiceId?: string;
 
-  constructor(props: OrderProps) {
+  constructor(props: OrderProps, id?: Id) {
     super(props.id);
 
     this._client = props.client;
@@ -33,7 +33,7 @@ export default class Order extends BaseEntity {
     this._invoiceId = props.invoiceId || null;
   }
 
-  approved(): void {
+  approved() {
     this._status = 'approved';
   }
 

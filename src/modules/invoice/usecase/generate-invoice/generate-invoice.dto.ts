@@ -5,7 +5,10 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
+import InvoiceItem from "../../domain/invoice-item.entity";
+
 export interface GenerateInvoiceUseCaseInputDto {
+  id?: string;
   name: string;
   document: string;
   street: string;
@@ -14,11 +17,7 @@ export interface GenerateInvoiceUseCaseInputDto {
   city: string;
   state: string;
   zipCode: string;
-  items: {
-    id: string;
-    name: string;
-    price: number;
-  }[];
+  items: InvoiceItem[];
 }
 
 export interface GenerateInvoiceUseCaseOutputDto {
@@ -31,10 +30,6 @@ export interface GenerateInvoiceUseCaseOutputDto {
   city: string;
   state: string;
   zipCode: string;
-  items: {
-    id: string;
-    name: string;
-    price: number;
-  }[];
+  items: InvoiceItem[];
   total: number;
 }

@@ -5,11 +5,18 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
-import { Column, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
-import { InvoiceItemModel } from "./invoice-item.model";
+import { Column, DataType, HasMany, Model, PrimaryKey, Table } from "sequelize-typescript";
+
+interface ProductData {
+  id: string;
+  name: string;
+  price: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 @Table({
-  tableName: 'invoices',
+  tableName: 'invoice',
   timestamps: false
 })
 export class InvoiceModel extends Model {
@@ -29,7 +36,7 @@ export class InvoiceModel extends Model {
   @Column({ allowNull: false })
   declare number: string
 
-  @Column({ allowNull: false })
+  @Column({ allowNull: true })
   declare complement: string
 
   @Column({ allowNull: false })
@@ -41,12 +48,13 @@ export class InvoiceModel extends Model {
   @Column({ allowNull: false })
   declare zipCode: string
 
+
+  @Column({ allowNull: true, type: DataType.JSON })
+  declare items: ProductData[];
+
   @Column({ allowNull: false })
   declare createdAt: Date
 
   @Column({ allowNull: false })
   declare updatedAt: Date
-
-  @HasMany(() => InvoiceItemModel)
-  declare items: InvoiceItemModel[];
 }    

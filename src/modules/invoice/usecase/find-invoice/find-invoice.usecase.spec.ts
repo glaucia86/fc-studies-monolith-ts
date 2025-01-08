@@ -11,68 +11,54 @@ import Invoice from "../../domain/invoice.entity";
 import Address from "../../domain/value-object/address.value-object";
 import FindInvoiceUseCase from "./find-invoice.usecase";
 
-const invoiceItem = new InvoiceItem({
-  id: new Id("1"),
-  name: "Product 1",
-  price: 100,
-});
-
 const invoice = new Invoice({
-  id: new Id("1"),
-  name: "Invoice-01",
-  document: "Doc-01",
-  address: new Address(
-    "Street 1",
-    "123",
-    "Complement 1",
-    "City 1",
-    "State 1",
-    "12345-678"
-  ),
-  items: [invoiceItem],
-});
+  id: new Id('1'),
+  name: 'invoice 1',
+  document: 'document 1',
+  address: new Address({
+    street: 'street 1',
+    number: 'number 1',
+    complement: 'complemente 1',
+    city: 'city 1',
+    state: 'stata 1',
+    zipCode: 'zip-code-1',
+  }),
+  items: [
+    {
+      id: new Id('uuid-item-1'),
+      name: 'item 1',
+      price: 100
+    },
+    {
+      id: new Id('uuid-item-1'),
+      name: 'item 1',
+      price: 150
+    }
+  ].map(({ id, name, price }) => new InvoiceItem({ id, name, price })),
+})
 
-const MockInvoiceRepository = () => {
+const MockRepository = () => {
   return {
     generate: jest.fn(),
     find: jest.fn().mockReturnValue(Promise.resolve(invoice)),
   }
-}
+};
 
-describe('Find Invoice Use Case Unit Test', () => {
-  it('should find an invoice', async () => {
-    const invoiceRepository = MockInvoiceRepository();
-    const findInvoiceUseCase = new FindInvoiceUseCase(invoiceRepository);
+describe("find Invoice Usecase unit test", () => {
+  it("should find a Invoice", async () => {
+    const repository = MockRepository();
+    const usecase = new FindInvoiceUseCase(repository);
 
-    const input = {
-      id: "1",
-    }
+    const input = { id: '1' }
+    const result = await usecase.execute(input);
 
-    const result = await findInvoiceUseCase.execute(input);
-
-    expect(invoiceRepository.find).toHaveBeenCalled();
-    expect(result.id).toBe("1");
-    expect(result.name).toBe("Invoice-01");
-    expect(result.document).toBe("Doc-01");
-    expect(result.address.street).toBe("Street 1");
-    expect(result.address.number).toBe("123");
-    expect(result.address.complement).toBe("Complement 1");
-    expect(result.address.city).toBe("City 1");
-    expect(result.address.state).toBe("State 1");
-    expect(result.address.zipCode).toBe("12345-678");
-    expect(result.items[0].id).toBe("1");
-    expect(result.items[0].name).toBe("Product 1");
-    expect(result.items[0].price).toBe(100);
-    expect(result.total).toBe(100);
-    expect(result.createdAt).toEqual(expect.any(Date));
-  });
-
-  it('should throw an error when invoice is not found', async () => {
-    const invoiceRepository = MockInvoiceRepository();
-    invoiceRepository.find = jest.fn().mockReturnValue(null);
-
-    const findInvoiceUseCase = new FindInvoiceUseCase(invoiceRepository);
-
-    await expect(findInvoiceUseCase.execute({ id: "non-existing-id" })).rejects.toThrow('Invoice not found');
+    expect(repository.find).toHaveBeenCalled();
+    expect(result.id).toEqual(input.id);
+    expect(result.name).toEqual(invoice.name);
+    expect(result.document).toEqual(invoice.document);
+    expect(result.address).toEqual(invoice.address);
+    expect(result.items).toEqual(invoice.items);
+    expect(result.total).toEqual(250);
+    expect(result.createdAt).toEqual(invoice.createdAt);
   });
 });
