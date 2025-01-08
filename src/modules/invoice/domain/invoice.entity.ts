@@ -8,24 +8,25 @@
 import AggregateRoot from "../../@shared/domain/entity/aggregate-root.interface";
 import BaseEntity from "../../@shared/domain/entity/base.entity";
 import Id from "../../@shared/domain/value-object/id.value-object";
-import { InvoiceItem } from "./product.entity";
-import { Address } from "./value-object/address.value-object";
+import Product from "./product.entity";
+
+import Address from "./value-object/address.value-object";
 
 type InvoiceProps = {
   id?: Id;
   name: string;
   document: string;
   address: Address;
-  items: InvoiceItem[];
+  items: Product[];
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export class Invoice extends BaseEntity implements AggregateRoot {
+export default class Invoice extends BaseEntity implements AggregateRoot {
   private _name: string;
   private _document: string;
   private _address: Address //value object
-  private _items: InvoiceItem[]; //Invoice Items entity
+  private _items: Product[]; //Invoice Items entity
 
   constructor(props: InvoiceProps) {
     super(props.id, props.createdAt, props.updatedAt);
@@ -47,16 +48,11 @@ export class Invoice extends BaseEntity implements AggregateRoot {
     return this._address;
   }
 
-  get items(): InvoiceItem[] {
+  get items(): Product[] {
     return this._items;
   }
 
-  get total(): number {
-    let total = 0;
-    this._items.forEach(item => {
-      total += item.price;
-    });
-
-    return total;
+  total(): number {
+    return this._items.reduce((acc, item) => acc + item.price, 0);
   }
 }
