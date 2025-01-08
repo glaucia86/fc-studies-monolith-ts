@@ -15,7 +15,7 @@ import { OrderRepository } from "./order.repository";
 
 const mockDate = new Date(2025, 1, 1);
 
-describe('OrderRepository test', () => {
+describe("OrderRepository test", () => {
   let sequelize: Sequelize;
 
   beforeEach(async () => {
@@ -38,30 +38,31 @@ describe('OrderRepository test', () => {
     jest.useRealTimers();
   });
 
-  it('should create a new order', async () => {
+  it("should add an order", async () => {
     const product1 = new Product({
-      name: 'Product 1',
+      name: "Product 1",
       salesPrice: 100,
-      description: 'Product 1 description',
+      description: "Description 1",
     });
 
     const product2 = new Product({
-      name: 'Product 2',
+      name: "Product 2",
       salesPrice: 200,
-      description: 'Product 2 description',
+      description: "Description 2",
     });
 
     const orderClient = new Client({
-      id: new Id('1'),
-      name: 'Client 1',
-      email: 'email@email.com',
-      address: 'Client 1 address',
+      id: new Id("1"),
+      name: "John Doe",
+      email: "john.doe@email.com",
+      document: '',
+      address: "Main Street, CA, 123",
     });
 
     const order = new Order({
       client: orderClient,
       products: [product1, product2],
-      invoiceId: '123',
+      invoiceId: "anyInvoiceId",
     });
 
     order.approved();
@@ -72,37 +73,37 @@ describe('OrderRepository test', () => {
     expect(result).toStrictEqual(order);
   });
 
-  it('should find an order', async () => {
+  it("should find an order", async () => {
     const orderData = {
-      id: '1',
+      id: "321",
       createdAt: mockDate,
       updatedAt: mockDate,
-      status: 'approved',
-      invoiceId: '123',
+      status: "approved",
+      invoiceId: "anyInvoiceId",
       client: {
-        id: '1',
+        id: "1",
         createdAt: mockDate,
         updatedAt: mockDate,
-        name: 'Client 1',
-        email: 'email@email.com',
-        address: 'Client 1 address',
+        name: "John Doe",
+        email: "john.doe@email.com",
+        address: "Main Street, CA, 123",
       },
       products: [
         {
-          id: '1',
+          id: "35",
           createdAt: mockDate,
           updatedAt: mockDate,
-          name: 'Product 1',
+          name: "Product 1",
+          description: "Description 1",
           salesPrice: 100,
-          description: 'Product 1 description',
         },
         {
-          id: '2',
+          id: "63",
           createdAt: mockDate,
           updatedAt: mockDate,
-          name: 'Product 2',
+          name: "Product 2",
+          description: "Description 2",
           salesPrice: 200,
-          description: 'Product 2 description',
         },
       ],
     };
@@ -110,7 +111,7 @@ describe('OrderRepository test', () => {
     await OrderModel.create(orderData);
     const orderRepository = new OrderRepository();
 
-    const result = await orderRepository.findOrder('1');
+    const result = await orderRepository.findOrder("321");
 
     expect(result.id.id).toEqual(orderData.id);
     expect(result.status).toEqual(orderData.status);
@@ -127,7 +128,11 @@ describe('OrderRepository test', () => {
     const firstProductResult = result.products[0];
     expect(firstProductResult.id).toEqual(orderData.products[0].id);
     expect(firstProductResult.name).toEqual(orderData.products[0].name);
-    expect(firstProductResult.salesPrice).toEqual(orderData.products[0].salesPrice);
-    expect(firstProductResult.description).toEqual(orderData.products[0].description);
+    expect(firstProductResult.salesPrice).toEqual(
+      orderData.products[0].salesPrice
+    );
+    expect(firstProductResult.description).toEqual(
+      orderData.products[0].description
+    );
   });
 });

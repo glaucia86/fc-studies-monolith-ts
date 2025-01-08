@@ -36,7 +36,6 @@ export class OrderRepository implements CheckoutGateway {
     });
 
     const result = orderModelToOrder(orderCreated);
-
     return result;
   }
 

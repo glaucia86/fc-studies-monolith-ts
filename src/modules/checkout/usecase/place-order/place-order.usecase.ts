@@ -22,41 +22,44 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
   private _clientFacade: ClientAdmFacadeInterface;
   private _productFacade: ProductAdmFacadeInterface;
   private _catalogFacade: StoreCatalogFacadeInterface;
-  private _invoiceFacade: InvoiceFacadeInterface;
   private _paymentFacade: PaymentFacadeInterface;
+  private _invoiceFacade: InvoiceFacadeInterface;
   private _orderRepository: CheckoutGateway;
 
   constructor(
     clientFacade: ClientAdmFacadeInterface,
     productFacade: ProductAdmFacadeInterface,
     catalogFacade: StoreCatalogFacadeInterface,
-    invoiceFacade: InvoiceFacadeInterface,
     paymentFacade: PaymentFacadeInterface,
-    orderRepository: CheckoutGateway,
-
+    invoiceFacade: InvoiceFacadeInterface,
+    orderRepository: CheckoutGateway
   ) {
     this._clientFacade = clientFacade;
     this._productFacade = productFacade;
     this._catalogFacade = catalogFacade;
-    this._invoiceFacade = invoiceFacade;
     this._paymentFacade = paymentFacade;
+    this._invoiceFacade = invoiceFacade;
     this._orderRepository = orderRepository;
   }
 
   async execute(input: PlaceOrderInputDto): Promise<PlaceOrderOutputDto> {
     const client = await this._clientFacade.find({ id: input.clientId });
+
     if (!client) {
-      throw new Error('Client not found');
+      throw new Error("Client not found");
     }
 
     await this.validateProducts(input);
 
-    const products = await Promise.all(input.products.map(p => this.getProduct(p.productId)));
+    const products = await Promise.all(
+      input.products.map((p) => this.getProduct(p.productId))
+    );
 
     const orderClient = new Client({
       id: new Id(client.id),
       name: client.name,
       email: client.email,
+      document: client.document,
       address: client.address,
     });
 
@@ -68,11 +71,11 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
     const payment = await this._paymentFacade.process({
       orderId: order.id.id,
       amount: order.total,
-    })
+    });
 
     const invoice =
       payment.status === "approved"
-        ? await this._invoiceFacade.generateInvoice({
+        ? await this._invoiceFacade.generate({
           city: client.address,
           zipCode: client.address,
           street: client.address,
@@ -89,9 +92,9 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
         })
         : null;
 
-    payment.status === 'approved' && order.approved();
+    payment.status === "approved" && order.approved();
 
-    const invoiceId = payment.status === 'approved' ? invoice.id : null;
+    const invoiceId = payment.status === "approved" ? invoice.id : null;
 
     order.setInvoiceId(invoiceId);
     this._orderRepository.addOrder(order);
@@ -107,31 +110,34 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
 
   private async validateProducts(input: PlaceOrderInputDto): Promise<void> {
     if (input.products.length === 0) {
-      throw new Error('No products selected');
+      throw new Error("No products selected");
     }
 
-    for (const p of input.products) {
-      const product = await this._productFacade.checkStock({ productId: p.productId });
-      if (product.stock <= 0) {
-        throw new Error(`Product ${p.productId} is not available in stock`);
+    for (const product of input.products) {
+      const productStock = await this._productFacade.checkStock({
+        productId: product.productId,
+      });
+
+      if (productStock.stock <= 0) {
+        throw new Error(
+          `Product ${product.productId} is not available in stock`
+        );
       }
     }
   }
 
   private async getProduct(productId: string): Promise<Product> {
     const product = await this._catalogFacade.findById({ id: productId });
-
     if (!product) {
-      throw new Error('Product not found');
+      throw new Error("Product not found");
     }
 
-    const productProps = {
-      id: new Id(product.id),
-      name: product.name,
-      description: product.description,
-      salesPrice: product.salesPrice,
-    };
-
-    return new Product(productProps);
+    const { id, name, description, salesPrice } = product;
+    return new Product({
+      id: new Id(id),
+      name,
+      description,
+      salesPrice,
+    });
   }
 }
