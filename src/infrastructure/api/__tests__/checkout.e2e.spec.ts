@@ -1,6 +1,7 @@
 import { app, sequelize } from '../express'
 import request from 'supertest'
 
+
 describe('E2E test for checkout', () => {
     beforeAll(async () => {
         await sequelize.sync({ force: true });
@@ -47,7 +48,7 @@ describe('E2E test for checkout', () => {
                     }
                 ]
             });
-
+      
         expect(response.status).toBe(200);
         expect(response.body.id).toBeDefined
         expect(response.body.invoiceId).toBeDefined
