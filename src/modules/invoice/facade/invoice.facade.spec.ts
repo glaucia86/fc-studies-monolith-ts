@@ -1,126 +1,112 @@
 import { Sequelize } from "sequelize-typescript";
 import InvoiceFacadeFactory from "../factory/facade.factory";
 import { InvoiceModel } from "../repository/invoice.model";
-import Address from "../domain/value-object/address.value-object";
+import { InvoiceItemModel } from "../repository/invoice-item.model";
 
-
-describe('Invoice Facade Test', () => {
-
-  let sequelize: Sequelize
+describe("InvoiceFacade test", () => {
+  let sequelize: Sequelize;
 
   beforeEach(async () => {
-
     sequelize = new Sequelize({
       dialect: "sqlite",
       storage: ":memory:",
       logging: false,
       sync: { force: true }
+
     });
 
-    sequelize.addModels([InvoiceModel])
-    await sequelize.sync()
+    await sequelize.addModels([InvoiceModel, InvoiceItemModel]);
+    await sequelize.sync();
   });
 
   afterEach(async () => {
-    await sequelize.close()
+    await sequelize.close();
   });
 
-  it('should generate an invoice', async () => {
-    const invoiceFacade = InvoiceFacadeFactory.create();
 
-    const input = {
-      name: 'Client Name',
-      document: 'Client Document',
-      street: 'Main St',
-      number: '100',
-      complement: 'Apt 10',
-      city: 'Anytown',
-      state: 'Anystate',
-      zipCode: '12345-678',
-      items: [
-        {
-          id: '1',
-          name: 'Product 1',
-          price: 50,
-        },
-        {
-          id: '2',
-          name: 'Product 2',
-          price: 100,
-        },
-      ],
-    };
+  const facade = InvoiceFacadeFactory.create();
+  const input = {
+    name: "John Doe",
+    document: "123456789",
+    street: "Rua 1",
+    number: "123",
+    complement: "Casa",
+    city: "Cidade",
+    state: "Estado",
+    zipCode: "12345678",
+    items: [
+      {
+        name: "item 1",
+        price: 10,
+      },
+      {
+        name: "item 2",
+        price: 20,
+      }
+    ]
+  }
 
-    const invoiceGenerated = await invoiceFacade.generate(input);
-    const invoiceOnDatabase = await InvoiceModel.findOne({
-      where: { id: invoiceGenerated.id },
+
+  it("should create a invoice", async () => {
+    const output = await facade.generateInvoice(input);
+
+    const invoiceDb = await InvoiceModel.findOne({
+      where: { id: output.id },
+      include: [{ model: InvoiceItemModel }],
     });
 
-    expect(invoiceGenerated.id).toBeDefined();
-    expect(invoiceOnDatabase.id).toBeDefined();
-    expect(invoiceGenerated.name).toBe(input.name);
-    expect(invoiceGenerated.document).toEqual(input.document);
-    expect(invoiceGenerated.items).toEqual(input.items);
-    expect(invoiceGenerated.total).toEqual(150);
+    expect(invoiceDb.id).toEqual(output.id);
+    expect(invoiceDb.name).toEqual(output.name);
+    expect(invoiceDb.document).toEqual(output.document);
+    expect(invoiceDb.street).toEqual(output.street);
+    expect(invoiceDb.number).toEqual(output.number);
+    expect(invoiceDb.complement).toEqual(output.complement);
+    expect(invoiceDb.city).toEqual(output.city);
+    expect(invoiceDb.state).toEqual(output.state);
+    expect(invoiceDb.zipCode).toEqual(output.zipCode);
 
-    expect(invoiceGenerated.street).toEqual(input.street);
-    expect(invoiceGenerated.number).toEqual(input.number);
-    expect(invoiceGenerated.complement).toEqual(input.complement);
-    expect(invoiceGenerated.city).toEqual(input.city);
-    expect(invoiceGenerated.state).toEqual(input.state);
-    expect(invoiceGenerated.zipCode).toEqual(input.zipCode);
+    const itemsDb = invoiceDb.items;
+    expect(itemsDb).toHaveLength(2);
+
+    expect(itemsDb[0].id).toEqual(output.items[0].id);
+    expect(itemsDb[0].name).toEqual(output.items[0].name);
+    expect(itemsDb[0].price).toEqual(output.items[0].price);
+
+    expect(itemsDb[1].id).toEqual(output.items[1].id);
+    expect(itemsDb[1].name).toEqual(output.items[1].name);
+    expect(itemsDb[1].price).toEqual(output.items[1].price);
+
+
+
   });
 
-  it('should find an invoice', async () => {
-    const invoiceFacade = InvoiceFacadeFactory.create();
+  it("should find a invoice", async () => {
 
-    const invoiceCreated = await InvoiceModel.create({
-      id: '1',
-      name: 'Invoice-01',
-      document: 'Document-01',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      items: [
-        {
-          id: '1',
-          name: 'Product 1',
-          price: 50,
-        },
-        {
-          id: '2',
-          name: 'Product 2',
-          price: 100,
-        }
-      ],
-      street: 'Main St',
-      number: '100',
-      complement: 'Apt 10',
-      city: 'Anytown',
-      state: 'Anystate',
-      zipCode: '12345-678',
-    });
+    const invoice = await facade.generateInvoice(input);
 
-    const result = await invoiceFacade.findInvoice({ id: '1' });
+    const invoiceDb = await facade.findInvoice({ id: invoice.id });
 
-    expect(result.id).toEqual(invoiceCreated.id);
-    expect(result.name).toEqual(invoiceCreated.name);
-    expect(result.document).toEqual(invoiceCreated.document);
+    expect(invoiceDb.id).toEqual(invoice.id);
+    expect(invoiceDb.name).toEqual(invoice.name);
+    expect(invoiceDb.document).toEqual(invoice.document);
+    expect(invoiceDb.address.street).toEqual(invoice.street);
+    expect(invoiceDb.address.number).toEqual(invoice.number);
+    expect(invoiceDb.address.complement).toEqual(invoice.complement);
+    expect(invoiceDb.address.city).toEqual(invoice.city);
+    expect(invoiceDb.address.state).toEqual(invoice.state);
+    expect(invoiceDb.address.zipCode).toEqual(invoice.zipCode);
 
-    expect(result.createdAt.toString()).toEqual(invoiceCreated.createdAt.toString());
 
-    expect(result.total).toEqual(150);
+    const itemsDb = invoiceDb.items;
+    expect(itemsDb).toHaveLength(2);
 
-    expect(result.items.length).toEqual(2);
+    expect(itemsDb[0].id).toEqual(invoice.items[0].id);
+    expect(itemsDb[0].name).toEqual(invoice.items[0].name);
+    expect(itemsDb[0].price).toEqual(invoice.items[0].price);
 
-    expect(result.address).toEqual(
-      new Address({
-        street: 'street',
-        number: 'number',
-        complement: 'complement',
-        city: 'city',
-        state: 'state',
-        zipCode: 'zipCode',
-      })
-    );
+    expect(itemsDb[1].id).toEqual(invoice.items[1].id);
+    expect(itemsDb[1].name).toEqual(invoice.items[1].name);
+    expect(itemsDb[1].price).toEqual(invoice.items[1].price);
+
   });
 });

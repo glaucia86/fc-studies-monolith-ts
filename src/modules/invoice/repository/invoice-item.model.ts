@@ -26,4 +26,10 @@ export class InvoiceItemModel extends Model {
   @ForeignKey(() => InvoiceModel)
   @Column({ allowNull: false, field: 'invoice_id' })
   declare invoiceId: string
+
+  @Column({ allowNull: false, field: "created_at" })
+  createdAt: Date;
+
+  @Column({ allowNull: false, field: "updated_at" })
+  updatedAt: Date;
 }
