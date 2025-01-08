@@ -8,7 +8,7 @@
 import Id from "../../../@shared/domain/value-object/id.value-object";
 import UseCaseInterface from "../../../@shared/usecase/use-case.interface";
 import ClientAdmFacadeInterface from "../../../client-adm/facade/client-adm.facade.interface";
-import { InvoiceFacadeInterface } from "../../../invoice/facade/invoice.facade.interface";
+import InvoiceFacadeInterface from "../../../invoice/facade/invoice.facade.interface";
 import PaymentFacadeInterface from "../../../payment/facade/payment.facade.interface";
 import ProductAdmFacadeInterface from "../../../product-adm/facade/product-adm.facade.interface";
 import StoreCatalogFacadeInterface from "../../../store-catalog/facade/store-catalog.facade.interface.dto";
@@ -76,21 +76,21 @@ export default class PlaceOrderUseCase implements UseCaseInterface {
 
     const invoice =
       payment.status === "approved"
-        ? await this._invoiceFacade.generate({
-            city: client.address,
-            zipCode: client.address,
-            street: client.address,
-            state: client.address,
-            complement: client.address,
-            number: client.address,
-            name: client.name,
-            document: client.document,
-            items: products.map((p) => ({
-              id: p.id.id,
-              name: p.name,
-              price: p.salesPrice,
-            })),
-          })
+        ? await this._invoiceFacade.create({
+          city: client.address,
+          zipCode: client.address,
+          street: client.address,
+          state: client.address,
+          complement: client.address,
+          number: client.address,
+          name: client.name,
+          document: client.document,
+          items: products.map((p) => ({
+            id: p.id.id,
+            name: p.name,
+            price: p.salesPrice,
+          })),
+        })
         : null;
 
     payment.status === "approved" && order.approved();

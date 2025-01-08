@@ -1,11 +1,12 @@
 import { Sequelize } from "sequelize-typescript";
-import { InvoiceModel } from "../repository/invoice.model";
+import InvoiceModel from "../repository/transaction.model";
 import InvoiceItemModel from "../repository/transaction.item.model";
 import InvoiceRepository from "../repository/transaction.repository";
 import GenerateInvoiceUseCase from "../usecase/find/find-invoice.usecase";
+
+import FindInvoiceUseCase from "../usecase/find/find-invoice.usecase";
+import InvoiceFacadeFactory from "../factory/invoice.facade.factory";
 import InvoiceFacade from "./invoice.facade";
-
-
 
 describe("InvoiceRepository test", () => {
   let sequelize: Sequelize;
