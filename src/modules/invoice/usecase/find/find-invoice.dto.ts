@@ -5,13 +5,11 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
-import InvoiceItem from "../../domain/product.entity";
-
-export interface FindInvoiceUseCaseInputDto {
-  id: string;
+export interface FindInvoiceUseCaseInputDTO {
+  id: string
 }
 
-export interface FindInvoiceUseCaseOutputDto {
+export interface FindInvoiceUseCaseOutputDTO {
   id: string;
   name: string;
   document: string;
@@ -23,7 +21,11 @@ export interface FindInvoiceUseCaseOutputDto {
     state: string;
     zipCode: string;
   };
-  items: InvoiceItem[];
+  items: {
+    id: string;
+    name: string;
+    price: number;
+  }[];
   total: number;
   createdAt: Date;
 }
