@@ -5,8 +5,6 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
-
-
 import Id from "../../../@shared/domain/value-object/id.value-object";
 import Address from "../../domain/address.entity";
 import Product from "../../domain/product.entity";
