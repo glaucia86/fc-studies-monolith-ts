@@ -5,17 +5,14 @@ import GenerateInvoiceUseCase from "../usecase/generate-invoice/generate-invoice
 
 export default class InvoiceFacadeFactory {
 
-  static create(): InvoiceFacade {
-    const invoiceRepository = new InvoiceRepository();
-    const addInvoiceUsecase = new GenerateInvoiceUseCase(invoiceRepository);
-    const findInvoiceUsecase = new FindInvoiceUseCase(invoiceRepository);
-
+  static create() {
+    const repository = new InvoiceRepository();
+    const findUsecase = new FindInvoiceUseCase(repository);
+    const generateUsecase = new GenerateInvoiceUseCase(repository);
     const facade = new InvoiceFacade({
-      addInvoiceUseCase: addInvoiceUsecase,
-      findInvoiceUseCase: findInvoiceUsecase
+      generateUseCase: generateUsecase,
+      findUsecase: findUsecase,
     });
-
     return facade;
-
   }
 }

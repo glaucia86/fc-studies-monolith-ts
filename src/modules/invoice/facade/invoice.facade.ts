@@ -13,7 +13,7 @@ export interface UseCaseProps {
   findUsecase: UseCaseInterface;
 }
 
-export class InvoiceFacade implements InvoiceFacadeInterface {
+export default class InvoiceFacade implements InvoiceFacadeInterface {
   private _generateUseCase: UseCaseInterface;
   private _findUseCase: UseCaseInterface;
 
