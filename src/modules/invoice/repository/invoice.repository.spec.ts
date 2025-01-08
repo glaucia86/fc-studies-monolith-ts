@@ -5,12 +5,13 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
-import { Sequelize } from "sequelize-typescript";
-import { InvoiceModel } from "./invoice.model";
-import Id from "../../@shared/domain/value-object/id.value-object";
-import Invoice from "../domain/invoice.entity";
-import Address from "../domain/value-object/address.value-object";
-import InvoiceRepository from "./invoice.repository";
+import { Sequelize } from "sequelize-typescript"
+import { InvoiceModel } from "./invoice.model"
+import Invoice from "../domain/invoice.entity"
+import Id from "../../@shared/domain/value-object/id.value-object"
+import { Address } from "../../@shared/domain/value-object/address"
+import InvoiceRepository from "./invoice.repository"
+
 
 describe("Invoice Repository test", () => {
   let sequelize: Sequelize
@@ -37,14 +38,14 @@ describe("Invoice Repository test", () => {
       id: new Id('1'),
       name: 'Invoice 1',
       document: 'Document 1',
-      address: new Address({
-        street: "Rua 123",
-        number: "99",
-        complement: "Endereço",
-        city: "Rio de Janeiro",
-        state: "RJ",
-        zipCode: "00000-000"
-      }),
+      address: new Address(
+        "Rua 123",
+        "99",
+        "Casa Verde",
+        "Criciúma",
+        "SC",
+        "88888-888"
+      ),
     })
 
     const repository = new InvoiceRepository();
@@ -73,10 +74,10 @@ describe("Invoice Repository test", () => {
       document: 'Document 1',
       street: "Rua 123",
       number: "99",
-      complement: "Endereço",
-      city: "Rio de Janeiro",
-      state: "RJ",
-      zipCode: "00000-000",
+      complement: "Casa Verde",
+      city: "Criciúma",
+      state: "SC",
+      zipcode: "88888-888",
       createdAt: new Date(),
       updatedAt: new Date()
     })

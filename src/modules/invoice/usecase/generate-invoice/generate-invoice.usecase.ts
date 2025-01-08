@@ -5,9 +5,9 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
+import { Address } from "../../../@shared/domain/value-object/address";
 import Id from "../../../@shared/domain/value-object/id.value-object";
 import Invoice from "../../domain/invoice.entity";
-import Address from "../../domain/value-object/address.value-object";
 import InvoiceGateway from "../../gateway/invoice.gateway";
 import { GenerateInvoiceUseCaseInputDto, GenerateInvoiceUseCaseOutputDto } from "./generate-invoice.dto";
 
@@ -23,14 +23,14 @@ export default class GenerateInvoiceUseCase {
       id: new Id(input.id) || new Id(),
       name: input.name,
       document: input.document,
-      address: new Address({
-        street: input.street,
-        number: input.number,
-        complement: input.complement,
-        city: input.city,
-        state: input.state,
-        zipCode: input.zipCode,
-      }),
+      address: new Address(
+        input.street,
+        input.number,
+        input.complement,
+        input.city,
+        input.state,
+        input.zipCode,
+      ),
       items: input.items
     }
 

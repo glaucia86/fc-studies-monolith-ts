@@ -5,24 +5,25 @@
  * author: Glaucia Lemos <Twitter: @glaucia_lemos86>
  */
 
+import { Address } from "../../../@shared/domain/value-object/address";
 import Id from "../../../@shared/domain/value-object/id.value-object";
 import InvoiceItem from "../../domain/invoice-item.entity";
 import Invoice from "../../domain/invoice.entity";
-import Address from "../../domain/value-object/address.value-object";
+
 import FindInvoiceUseCase from "./find-invoice.usecase";
 
 const invoice = new Invoice({
   id: new Id('1'),
   name: 'invoice 1',
   document: 'document 1',
-  address: new Address({
-    street: 'street 1',
-    number: 'number 1',
-    complement: 'complemente 1',
-    city: 'city 1',
-    state: 'stata 1',
-    zipCode: 'zip-code-1',
-  }),
+  address: new Address(
+    'street 1',
+    'number 1',
+    'complemente 1',
+    'city 1',
+    'stata 1',
+    'zip-code-1',
+  ),
   items: [
     {
       id: new Id('uuid-item-1'),

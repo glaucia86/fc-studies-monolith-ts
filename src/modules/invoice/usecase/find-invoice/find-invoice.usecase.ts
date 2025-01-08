@@ -10,23 +10,23 @@ import { FindInvoiceUseCaseInputDto, FindInvoiceUseCaseOutputDto } from "./find-
 
 
 export default class GenerateInvoiceUseCase {
-  private _clientRepository: InvoiceGateway;
+    private _clientRepository: InvoiceGateway;
 
-  constructor(clientRepository: InvoiceGateway) {
-      this._clientRepository = clientRepository;
-  }
+    constructor(clientRepository: InvoiceGateway) {
+        this._clientRepository = clientRepository;
+    }
 
-  async execute(input: FindInvoiceUseCaseInputDto): Promise<FindInvoiceUseCaseOutputDto> {
-      const result = await this._clientRepository.find(input.id);
+    async execute(input: FindInvoiceUseCaseInputDto): Promise<FindInvoiceUseCaseOutputDto> {
+        const result = await this._clientRepository.find(input.id);
 
-      return {
-          id: result.id.id,
-          name: result.name,
-          document: result.document,
-          address: result.address,
-          items: result.items,
-          total: result?.items?.reduce((prev, curr) => prev + curr.price, 0),
-          createdAt: result.createdAt,
-      }
-  }
+        return {
+            id: result.id.id,
+            name: result.name,
+            document: result.document,
+            address: result.address,
+            items: result.items,
+            total: result?.items?.reduce((prev, curr) => prev + curr.price, 0),
+            createdAt: result.createdAt,
+        }
+    }
 }
